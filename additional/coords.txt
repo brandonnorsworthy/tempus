@@ -1,0 +1,8 @@
+compass
+1008 12 tl
+1053 53 br
+
+scroll up
+380 60 tl
+900 670 br
+go down 150
