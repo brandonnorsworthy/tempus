@@ -1,6 +1,7 @@
 adb connect localhost:5555
 adb -s localhost:5555 shell input text ""
 adb -s localhost:5555 shell tap x y
+
 #can use for longpress
 adb -s localhost:5555 input swipe x1 y1 x2 y2 duration 
 
