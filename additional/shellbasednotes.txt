@@ -26,3 +26,14 @@ sleep 1                                     # wait for load
 adb shell input tap 1350 150                # open cart
 sleep 2                                     # wait for load
 adb shell input tap 800 480     
+
+
+#localhost connections / devices
+adb connect localhost 
+    connects 127.0.0.1:5555
+adb connect localhost:5555
+    connects 127.0.0.1:5555
+adb connect localhost:5565
+    connects next device 127.0.0.1:5565
+adb connect localhost:5575
+    connects 127.0.0.1:5575

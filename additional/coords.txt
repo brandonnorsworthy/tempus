@@ -6,3 +6,26 @@ scroll up
 380 60 tl
 900 670 br
 go down 150
+
+iron rock area
+x1 y1 x2 y2
+672 450 630 405
+
+x   y
+587 109
+max max
+960 540
+offset
+max x * y + x + 3
+
+518 260
+
+RESOLUTION
+960 X 540
+
+MAX BYTE SIZE
+960 * 540 * 4 + 12 = 2,073,612
+maxx * maxy * byte size + <systemdefault(12)>
+
+OFFSET FORMULA
+WIDTH * $Y + $X + 3 = <1/4 of max

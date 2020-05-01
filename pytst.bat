@@ -9,5 +9,3 @@ echo %random%%random%%random%%random%%random%%random%%random%%random%%random%%ra
 ping > nul
 ping > nul
 ping > nul
- 
-goto a

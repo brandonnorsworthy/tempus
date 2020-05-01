@@ -1,3 +1,6 @@
 cd C:\Users\Brandon\Desktop\ZiaBot\tools
-adb connect 127.0.0.1:5555
+adb disconnect
+adb connect localhost:5555
+adb connect localhost:5565
+adb connect localhost:5575
 adb devices
