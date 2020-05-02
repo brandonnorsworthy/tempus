@@ -1,9 +1,10 @@
 @echo off
 
 set port=%1
-set x=%2
-set y=%3
-set duration %4
+set x1=%2
+set y1=%3
+set x2=%4
+set y2=%5
 
 cd tools
-adb -s localhost:%port% shell "input swipe %x% %y% %duration;"
+adb -s localhost:%port% shell "input swipe %x1% %y1% %x2% %y2%;"
