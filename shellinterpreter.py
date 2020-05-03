@@ -33,6 +33,9 @@ def pixelSearch(interact_x, interact_y): #looks at a specific pixel and gives th
     return temp
 
 def hexToRGB(hex_value): #converts hex color to RGB values format: (255, 255, 255)
+    if not len(hex_value) == 6:
+        print("hexToRGB() parameter not 6 characters!")
+        return "(255, 255, 255)"
     return (tuple(int(hex_value[i:i+2], 16) for i in (0, 2, 4)))
 
 #[optional] A number between 0 and 255 to indicate the allowed number of shades of 
@@ -92,30 +95,38 @@ def setZoomLevel(): #zoom to exact setting
     clickRandom(909, 426, 943, 465)
     sleepRandom(1,3)
 
-def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2):
+def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2): #harvest any resource given the custom arguments
     depleted = False
-    for x in range(1,maxWaitAmount): #wait for rock to not be depleted of ore
+    shouldBreak = False
+    for x in range(1, maxWaitAmount): #wait for rock to not be depleted of ore
         if shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
             break
         else:
             if x == maxWaitAmount - 1:
                 depleted = True
-                print('depleted failed')
-            sleep(0.25)
+                print('mineOre() depleted rocks')
+            sleep(0.5)
             continue
     if not depleted:
         clickRandom(clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2) #click respawned ore
         sleepRandom(0.25,1) #wait for mining
-        for x in range(1,maxWaitAmount * 2): #wait for rock to not be depleted of ore
-            if shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
-                break
+        for x in range(1, maxWaitAmount): #wait for rock to not be depleted of ore
+            if not shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
+                for y in range(1, 4):
+                    if not shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
+                        shouldBreak = True
+                    else:
+                        sleep(0.5)
+                        continue
+                if shouldBreak:
+                    break
             else:
-                sleep(0.25)
+                sleep(0.5)
                 continue
 
-def mineIronOreSouthWestVarrock(): #varrock iron ore mine SW of varrock, stand between both iron rocks
-    mineOre(10, 10, '775344', 445, 265, 426, 258, 456, 289) #left ore
-    mineOre(10, 10, '704e3e', 481, 225, 466, 219, 496, 244) #top ore
+def mineIronOreSouthWestVarrock(): #varrock iron ore mine SW of varrock, stand between both iron rocks, one left, one north
+    mineOre(10, 15, '795545', 440, 285, 426, 258, 452, 289) #left ore
+    mineOre(10, 15, '765143', 463, 225, 466, 219, 496, 244) #top ore
 
 def main():
     #TODO call python script specifically for that emulator(port)
@@ -126,11 +137,10 @@ def main():
     #setZoomLevel()
 
     #loop based on how many times chosen
-    for current_loop in range(int(loop_amount)):
-        print("current loop: " + str(current_loop))
-        #mineIronOreSouthWestVarrock()
-        print(pixelSearch(445, 265))
+    for current_loop in range(int(loop_amount) + 1):
+        mineIronOreSouthWestVarrock()
+        #print(pixelSearch(440, 285))
 
-    print("finished\n")
+    print("##################finished#####################")
 
 main()
