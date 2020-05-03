@@ -1,6 +1,7 @@
 import subprocess
 import random
 import time
+import math
 from sys import argv
 
 script, loop_amount = argv
@@ -8,7 +9,6 @@ script, loop_amount = argv
 emulator_port = int(5555) #hard coded for testing allows for all emulators to be interacted with apon change
 resolution_width = int(960)
 resolution_height = int(540)
-
 
 #auto crunch area
 
@@ -95,6 +95,24 @@ def setZoomLevel(): #zoom to exact setting
     clickRandom(909, 426, 943, 465)
     sleepRandom(1,3)
 
+def dropItem(itemSlotToDrop): #drops an item from a specific slot in the backpack
+    #put the last slot at the front of the array so when you do a modulous division anything in the last slot returns 0 which
+    #still will give the correct slot value without logic
+    inventoryCoords = [[850, 715, 760, 805, 850], #top left x
+            [468, 236, 275, 313, 352, 391, 429, 468], #top left y
+            [877, 742, 787, 832, 877], #bottom right x
+            [491, 262, 301, 339, 375, 414, 452, 491]] #bottom right y
+
+    clickRandom((inventoryCoords[0][(itemSlotToDrop % 4)]), 
+        (inventoryCoords[1][math.ceil(itemSlotToDrop / 4)]), 
+        (inventoryCoords[2][(itemSlotToDrop % 4)]), 
+        (inventoryCoords[3][math.ceil(itemSlotToDrop / 4)]))    
+
+def dropInventory(itemSlotsToSkip): #drops all items in invetory skipping first slots up to a set amount //  can be set to 0 to clear inventory completely
+    for x in range(itemSlotsToSkip, 28):
+        dropItem(x)
+        sleepRandom(0.15, 1.15)
+
 def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2): #harvest any resource given the custom arguments
     depleted = False
     shouldBreak = False
@@ -137,10 +155,11 @@ def main():
     #setZoomLevel()
 
     #loop based on how many times chosen
-    for current_loop in range(int(loop_amount) + 1):
+    for current_loop in range(0,int(loop_amount)):
+        if ((current_loop % 14) == 0) and (current_loop != 0):
+            dropInventory(0)
         mineIronOreSouthWestVarrock()
-        #print(pixelSearch(440, 285))
 
-    print("##################finished#####################")
+    print("\n##################\nfinished\n#####################\n")
 
 main()
