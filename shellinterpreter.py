@@ -13,6 +13,9 @@ script, loop_amount, reset_camera = argv
 #TODO toggle the run off automatically on start
 #TODO add new capability walking to the bank from SW varrock
 #TODO add support for lumbridge tin and copper
+#TODO add support for connecting automatically
+#TODO add function for entering text from script
+#TODO add basic UI so i dont have to type shit out
 #TODO add more clarification to comments
 #TODO go one by one through functions and see if they can be more efficent or smaller
 #TODO add support for SW varrock tin and copper
