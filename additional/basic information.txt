@@ -1,0 +1,60 @@
+BlueStacks RESOLUTION
+960 X 540
+
+BlueStacks DPI
+240
+
+SCREENCAP MAX BYTE SIZE
+960 * 540 * 4 + 12 = 2,073,612
+maxx * maxy * byte size + <systemdefault(12)>
+
+SCREENCAP OFFSET FORMULA
+WIDTH * $Y + $X
+
+WORKING BYTE ANALYZER
+dd if="/sdcard/screencap.dump" bs=4 count=1 skip=<OFFSET> 2>/dev/null | hexdump -C
+
+SHELL INPUT COMMANDS
+adb shell input tap intx intx
+adb shell input text stringwords
+adb shell input keyevent intkey
+adb shell input swipe x1 y1 x2 y2 intduration
+
+#localhost connections / devices
+adb connect localhost 
+    connects 127.0.0.1:5555
+adb connect localhost:5555
+    connects 127.0.0.1:5555
+adb connect localhost:5565
+    connects next device 127.0.0.1:5565
+adb connect localhost:5575
+    connects 127.0.0.1:5575
+
+adb connect localhost:5555
+adb -s localhost:5555 shell input text ""
+adb -s localhost:5555 shell tap x y
+
+#can use for longpress
+adb -s localhost:5555 input swipe x1 y1 x2 y2 duration 
+
+#example
+adb shell input tap 750 300                 # tap search bar
+sleep 1                                     # wait for load
+adb shell input text 'echo'                 # input search
+adb shell input keyevent 66                 # executue search
+sleep 2                                     # wait for search to load
+adb shell input tap 700 800                 # tap product
+sleep 4                                     # wait for load
+adb shell input tap 740 2200                # tap color options
+sleep 1                                     # wait for load
+adb shell input tap 820 1460                # tap white
+sleep 1                                     # wait for load
+adb shell input tap 1290 960                # tap done
+sleep 1                                     # wait for load
+adb shell input swipe 540 1600 540 100 1500 # scroll down
+adb shell input swipe 540 1600 540 100 1500 # scroll down
+adb shell input tap 720 800                 # add to cart
+sleep 1                                     # wait for load
+adb shell input tap 1350 150                # open cart
+sleep 2                                     # wait for load
+adb shell input tap 800 480     

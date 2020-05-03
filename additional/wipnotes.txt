@@ -1,8 +1,0 @@
-screencap /sdcard/screencap.dump
-let offset=720*500+500+3
-
-broken~~~
-dd if="/sdcard/screencap.dump" bs=4 count=1 skip=$offset 2>/sdcard/result.txt | hd
-
-working~~~
-dd if="/sdcard/screencap.dump" bs=4 count=1 skip=360503 2>/dev/null | hexdump -C

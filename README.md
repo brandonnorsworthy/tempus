@@ -26,14 +26,19 @@ After downloading navigate to the installation location of ZiaBot via Command Pr
 
 ## Planned
 ```
-TODO call python script specifically for that emulator(port)
-TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
-TODO random circle ontop of randomness [multiple layers of randomness]
-TODO add area support to pixelSearch instead of a single pixel
-TODO toggle the run off automatically on start
-TODO add new capability walking to the bank from SW varrock
-TODO add support for lumbridge tin and copper
-TODO add support for SW varrock tin and copper
+#TODO call python script specifically for that emulator(port)
+#TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
+#TODO random circle ontop of randomness [multiple layers of randomness]
+#TODO add area support to pixelSearch instead of a single pixel
+#TODO toggle the run off automatically on start
+#TODO add new capability walking to the bank from SW varrock
+#TODO add support for lumbridge tin and copper
+#TODO add support for SW varrock tin and copper
+#TODO add option for either droping materials or banking them
+#TODO add a distraction chance while performing a repetative action
+#TODO "accidentally" click a random hotbar
+#TODO move the camera around and then return it back
+#TODO stop interacting for a random period of time up to ~3 minutes
 ```
 
 ## Copyright

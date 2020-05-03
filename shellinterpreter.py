@@ -6,6 +6,22 @@ from sys import argv
 
 script, loop_amount, reset_camera = argv
 
+#TODO call python script specifically for that emulator(port)
+#TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
+#TODO random circle ontop of randomness [multiple layers of randomness]
+#TODO add area support to pixelSearch instead of a single pixel
+#TODO toggle the run off automatically on start
+#TODO add new capability walking to the bank from SW varrock
+#TODO add support for lumbridge tin and copper
+#TODO add more clarification to comments
+#TODO go one by one through functions and see if they can be more efficent or smaller
+#TODO add support for SW varrock tin and copper
+#TODO add option for either droping materials or banking them
+#TODO add a distraction chance while performing a repetative action
+    #TODO "accidentally" click a random hotbar
+    #TODO move the camera around and then return it back
+    #TODO stop interacting for a random period of time up to ~3 minutes
+
 emulator_port = int(5555) #hard coded for testing allows for all emulators to be interacted with apon change
 resolution_width = int(960)
 resolution_height = int(540)
@@ -29,7 +45,7 @@ def shadeVariationTest(hex_value_current, hex_value_goal, threshold): #tests wet
     shadeWithinThreshold = True
     hex_value_goal = str(hex_value_goal)
 
-    #trim the RGB format eg (255, 255, 255) to only numbers and put into an array to be usable for threshold comparison
+    #trim the RGB format eg (255, 255, 255) -> ['255','255','255'] to only numbers and put into an array to be usable for threshold comparison
     rgb_current = str(hexToRGB(hex_value_current)) 
     rgb_current = rgb_current[1:len(rgb_current)-1].replace(',','',2).split()
     rgb_goal = str(hexToRGB(hex_value_goal)) 
@@ -121,7 +137,7 @@ def mineRock(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color
         else:
             if x == maxWaitAmount - 1:
                 depleted = True
-                print('mineRock(): rocks I am mining seem to be depleted.')
+                print('mineRock(): The rocks I am mining seem to be depleted.')
             sleep(0.5)
             continue
     if not depleted:
@@ -149,30 +165,22 @@ def mineIronOreSouthWestVarrock(): #Mine South-West of Varrock contains two clos
     mineRock(10, 15, '765143', 463, 225, 466, 219, 496, 244) #North iron rock
 
 def main():
-    #TODO call python script specifically for that emulator(port)
-    #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
-    #TODO random circle ontop of randomness [multiple layers of randomness]
-    #TODO add area support to pixelSearch instead of a single pixel
-    #TODO toggle the run off automatically on start
-    #TODO add new capability walking to the bank from SW varrock
-    #TODO add support for lumbridge tin and copper
-    #TODO add support for SW varrock tin and copper
-    #TODO add option for either droping materials or banking them
-
 
     if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
         centerCamera()
         setZoomLevel()
 
-    for current_loop in range(0,int(loop_amount)): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
-        if ((current_loop % 14) == 0) and (current_loop != 0):
+    for current_loop in range(1,int(loop_amount) - 1): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
+    
+        if ((current_loop % 14) == 0) and (current_loop != 0): #After collecting a full inventory it will drop everything onto the ground
             dropInventory(0)
-        if ((current_loop % (math.floor(int(loop_amount) / 4))) == 0):
+        
+        if ((current_loop % (math.floor(int(loop_amount) / 4))) == 0): #Keep user updated on progress of current run
             print("main(): Current Loop is: " + str(current_loop) + " out of " + str(loop_amount))
         
         #SCRIPT QUEUE
         mineIronOreSouthWestVarrock()
 
-    print("\n######################\n#######finished#######\n######################\n")
+    print("\n######################\n#######FINISHED#######\n######################\n")
 
 main()

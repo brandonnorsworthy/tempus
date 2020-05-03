@@ -1,7 +1,0 @@
-   $iPID = Run('adb shell "dd if="/sdcard/screencap.dump" bs=4 count=1 skip=360503 2>/dev/null | hexdump -C"', "", @SW_HIDE, $STDERR_CHILD + $STDOUT_CHILD)
-   ProcessWaitClose($iPID)
-   $sOutput = StringStripWS(StdoutRead($iPID), $STR_STRIPLEADING + $STR_STRIPTRAILING)
-   $sOutput = StringTrimLeft ($sOutput, 9)
-   $sOutput = StringTrimRight ($sOutput, StringLen($sOutput) - 10)
-   $sOutput = StringStripWS($sOutput, $STR_STRIPALL)
-   ConsoleWrite("Color" & $sOutput)
