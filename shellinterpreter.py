@@ -157,6 +157,7 @@ def main():
     #TODO add new capability walking to the bank from SW varrock
     #TODO add support for lumbridge tin and copper
     #TODO add support for SW varrock tin and copper
+    #TODO add option for either droping materials or banking them
 
 
     if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
