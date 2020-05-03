@@ -4,7 +4,7 @@ import time
 import math
 from sys import argv
 
-script, loop_amount = argv
+script, loop_amount, reset_camera = argv
 
 emulator_port = int(5555) #hard coded for testing allows for all emulators to be interacted with apon change
 resolution_width = int(960)
@@ -18,19 +18,6 @@ def sleep(amount): #sleeps for a specific amount of time
 def sleepRandom(min, max): #sleeps for a random amount of time within a range
     tempmax = max * random.random()
     time.sleep(min + tempmax)
-
-def pixelSearch(interact_x, interact_y): #looks at a specific pixel and gives the hex color value
-    stdoutlineformatted = "" #formatted byte string from byte variable stdoutline
-
-    if interact_x > resolution_width or interact_y > resolution_height:
-        print("Interaction location to great!")
-
-    item = subprocess.Popen(["shellcolorgrabber.bat", str(emulator_port), str(resolution_width * interact_y + interact_x)], shell=True, stdout=subprocess.PIPE) #launch subprocess to send commands to adb using .bat files
-    for stdoutline in item.stdout:
-        stdoutlineformatted += str(stdoutline, 'utf-8')
-
-    temp = "".join(stdoutlineformatted[stdoutlineformatted.find('00000000') + 10:stdoutlineformatted.find('ff')].split()) #grab the bytes only needed which are RGB seperated by spaces and strip the whitespace
-    return temp
 
 def hexToRGB(hex_value): #converts hex color to RGB values format: (255, 255, 255)
     if not len(hex_value) == 6:
@@ -57,7 +44,8 @@ def shadeVariationTest(hex_value_current, hex_value_goal, threshold): #tests wet
 
     return shadeWithinThreshold
 
-#interactions
+
+#SHELL INTERACTIONS [tap, swipe, text, pixel-search]
 
 def click(interact_x, interact_y): #clicks at a specific spot
     #port, x, y
@@ -74,17 +62,29 @@ def clickDragDown(min_x, min_y, max_x, max_y, min_distance, max_distance): #drag
     item = subprocess.Popen(["shellinputdrag.bat", str(emulator_port), str(tempx), str(tempy), 
     str(tempx), str(tempy + min_distance + ((max_distance - min_distance) * random.random()))], shell=True, stdout=subprocess.PIPE)
 
-#bot sections
+def pixelSearch(interact_x, interact_y): #looks at a specific pixel and gives the hex color value
+    stdoutlineformatted = "" #formatted byte string from byte variable stdoutline
 
-def centerCamera(): #sets camera to north
-    #click on compass
-    clickRandom(789, 38, 759, 10)
+    if interact_x > resolution_width or interact_y > resolution_height:
+        print("pixelSearch(): interaction location exceeds the resolution of the screen!")
+
+    item = subprocess.Popen(["shellcolorgrabber.bat", str(emulator_port), str(resolution_width * interact_y + interact_x)], shell=True, stdout=subprocess.PIPE) #launch subprocess to send commands to adb using .bat files
+    for stdoutline in item.stdout:
+        stdoutlineformatted += str(stdoutline, 'utf-8')
+
+    temp = "".join(stdoutlineformatted[stdoutlineformatted.find('00000000') + 10:stdoutlineformatted.find('ff')].split()) #grab the bytes only needed which are RGB seperated by spaces and strip the whitespace
+    return temp
+
+
+#BOT FUNCTIONS [actions, settings, inventory-management...]
+
+def centerCamera(): #Orients the camera to the North using the compass
+    clickRandom(789, 38, 759, 10) #Clicks on the compass
     sleepRandom(0.5, 4)
-    #drag up to center camera
-    clickDragDown(100, 51, 700, 360, 120, 200)
+    clickDragDown(100, 51, 700, 360, 120, 200) #Drags down to have the camera point as far down as possible to the character
     sleepRandom(1, 3)
 
-def setZoomLevel(): #zoom to exact setting
+def setZoomLevel(): #Opens settings and adjusts zoom to an exact setting, in the middle of the bar
     #go to settings
     clickRandom(909, 426, 943, 465)
     sleepRandom(1,3)
@@ -109,11 +109,11 @@ def dropItem(itemSlotToDrop): #drops an item from a specific slot in the backpac
         (inventoryCoords[3][math.ceil(itemSlotToDrop / 4)]))    
 
 def dropInventory(itemSlotsToSkip): #drops all items in invetory skipping first slots up to a set amount //  can be set to 0 to clear inventory completely
-    for x in range(itemSlotsToSkip, 28):
+    for x in range(itemSlotsToSkip, 29):
         dropItem(x)
         sleepRandom(0.15, 1.15)
 
-def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2): #harvest any resource given the custom arguments
+def mineRock(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2): #harvest any resource given the custom arguments
     depleted = False
     shouldBreak = False
     for x in range(1, maxWaitAmount): #wait for rock to not be depleted of ore
@@ -122,13 +122,13 @@ def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_
         else:
             if x == maxWaitAmount - 1:
                 depleted = True
-                print('mineOre() depleted rocks')
+                print('mineRock(): rocks I am mining seem to be depleted.')
             sleep(0.5)
             continue
     if not depleted:
         clickRandom(clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2) #click respawned ore
         sleepRandom(0.25,1) #wait for mining
-        for x in range(1, maxWaitAmount): #wait for rock to not be depleted of ore
+        for x in range(1, maxWaitAmount): #wait for rock to be depleted of ore
             if not shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
                 for y in range(1, 4):
                     if not shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
@@ -142,24 +142,32 @@ def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_
                 sleep(0.5)
                 continue
 
-def mineIronOreSouthWestVarrock(): #varrock iron ore mine SW of varrock, stand between both iron rocks, one left, one north
-    mineOre(10, 15, '795545', 440, 285, 426, 258, 452, 289) #left ore
-    mineOre(10, 15, '765143', 463, 225, 466, 219, 496, 244) #top ore
+
+#BOTTING SCRIPTS [skilling, money-makers...]
+
+def mineIronOreSouthWestVarrock(): #Mine South-West of Varrock contains two close iron rocks, stand between both iron rocks, one on the West, one to the North
+    mineRock(10, 15, '795545', 440, 285, 426, 258, 452, 289) #West iron rock
+    mineRock(10, 15, '765143', 463, 225, 466, 219, 496, 244) #North iron rock
 
 def main():
     #TODO call python script specifically for that emulator(port)
     #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
-    #TODO random circle ontop of randomness 
+    #TODO random circle ontop of randomness [multiple layers of randomness]
+    #TODO add area support to pixelSearch instead of a single pixel
 
-    #centerCamera()
-    #setZoomLevel()
+    if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
+        centerCamera()
+        setZoomLevel()
 
-    #loop based on how many times chosen
-    for current_loop in range(0,int(loop_amount)):
+    for current_loop in range(0,int(loop_amount)): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
         if ((current_loop % 14) == 0) and (current_loop != 0):
             dropInventory(0)
+        if ((current_loop % (math.floor(int(loop_amount) / 4))) == 0):
+            print("main(): Current Loop is: " + str(current_loop) + " out of " + str(loop_amount))
+        
+        #SCRIPT QUEUE
         mineIronOreSouthWestVarrock()
 
-    print("\n##################\nfinished\n#####################\n")
+    print("\n#####################\n#######finished######\n#####################\n")
 
 main()
