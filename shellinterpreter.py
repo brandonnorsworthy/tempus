@@ -92,29 +92,44 @@ def setZoomLevel(): #zoom to exact setting
     clickRandom(909, 426, 943, 465)
     sleepRandom(1,3)
 
-def mineIronOre(): #varrock iron ore mine SW of varrock, stand between both iron rocks
-    #left ore
-    for x in range(1,10):
-        if shadeVariationTest(pixelSearch(474,237), '795445', 10): #343232 depleted, #36251d filled
-            print(x)
+def mineOre(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2):
+    depleted = False
+    for x in range(1,maxWaitAmount): #wait for rock to not be depleted of ore
+        if shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
             break
         else:
-            print(x)
-            sleepRandom(0.5,1)
+            if x == maxWaitAmount - 1:
+                depleted = True
+                print('depleted failed')
+            sleep(0.25)
             continue
-    clickRandom(426, 258, 456, 289)
-    sleepRandom(1,3)
+    if not depleted:
+        clickRandom(clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2) #click respawned ore
+        sleepRandom(0.25,1) #wait for mining
+        for x in range(1,maxWaitAmount * 2): #wait for rock to not be depleted of ore
+            if shadeVariationTest(pixelSearch(color_X, color_Y), oreHexColorString, oreColorThreshold):
+                break
+            else:
+                sleep(0.25)
+                continue
+
+def mineIronOreSouthWestVarrock(): #varrock iron ore mine SW of varrock, stand between both iron rocks
+    mineOre(10, 10, '775344', 445, 265, 426, 258, 456, 289) #left ore
+    mineOre(10, 10, '704e3e', 481, 225, 466, 219, 496, 244) #top ore
 
 def main():
     #TODO call python script specifically for that emulator(port)
-    #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum
-    centerCamera()
-    setZoomLevel()
+    #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
+    #TODO random circle ontop of randomness 
+
+    #centerCamera()
+    #setZoomLevel()
+
     #loop based on how many times chosen
     for current_loop in range(int(loop_amount)):
-        print("current loop: " + current_loop)
-        mineIronOre()
-        sleep(1) 
+        print("current loop: " + str(current_loop))
+        #mineIronOreSouthWestVarrock()
+        print(pixelSearch(445, 265))
 
     print("finished\n")
 
