@@ -8,7 +8,7 @@ This is a 100% Mobile-based bot for OSRS, built completely in python by Brandon 
 
 ADB Technically isn't a requirement because it is automatically in the repository but if you want a direct download you can [click here](https://dl.google.com/android/repository/platform-tools-latest-windows.zip).
 
-To set up the script you also need to download **Python3** and **BlueStacks **
+To set up the script you also need to download **Python3** and **BlueStacks**
 
 **BlueStacks Settings**
 * First log into BlueStacks using the play store.
@@ -36,6 +36,7 @@ After downloading navigate to the installation location of ZiaBot via Command Pr
 #TODO add support for connecting automatically
 #TODO add function for entering text from script
 #TODO add basic UI so i dont have to type shit out
+#TODO ADD BREAKS WATCH YOUTUBE VIDEO FOR TIMES
 #TODO add more clarification to comments
 #TODO go one by one through functions and see if they can be more efficent or smaller
 #TODO add support for SW varrock tin and copper
