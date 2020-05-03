@@ -21,12 +21,9 @@ def sleepRandom(min, max): #sleeps for a random amount of time within a range
 
 def hexToRGB(hex_value): #converts hex color to RGB values format: (255, 255, 255)
     if not len(hex_value) == 6:
-        print("hexToRGB() parameter not 6 characters!")
+        print("hexToRGB(): Warning! Parameter hex_value is not 6 characters!")
         return "(255, 255, 255)"
     return (tuple(int(hex_value[i:i+2], 16) for i in (0, 2, 4)))
-
-#[optional] A number between 0 and 255 to indicate the allowed number of shades of 
-#variation of the red, green, and blue components of the color. Default is 0 (exact match).
 
 def shadeVariationTest(hex_value_current, hex_value_goal, threshold): #tests wether a hex or rgb value is within a certain shade of the color given
     shadeWithinThreshold = True
@@ -47,22 +44,24 @@ def shadeVariationTest(hex_value_current, hex_value_goal, threshold): #tests wet
 
 #SHELL INTERACTIONS [tap, swipe, text, pixel-search]
 
-def click(interact_x, interact_y): #clicks at a specific spot
-    #port, x, y
-    item = subprocess.Popen(["shellinputtap.bat", str(emulator_port), str(interact_x), str(interact_y)], shell=True, stdout=subprocess.PIPE)
+def click(interact_x, interact_y): #sends a Tap input at the given location
+    #shellinputtap.bat PARAMETER FORMAT argv = %1 = port, %2 = x, %3 = y
+    item = subprocess.Popen(["shellinputtap.bat", str(emulator_port), #Gives all parameters to the ADB shell to be processessed as an input
+        str(interact_x), str(interact_y)], shell=True, stdout=subprocess.PIPE)
 
-def clickRandom(min_x, min_y, max_x, max_y): #clicks a random spot within a range
-    #port, x, y
-    item = subprocess.Popen(["shellinputtap.bat", str(emulator_port), str(min_x + ((max_x - min_x) * random.random())), str(min_y + ((max_y - min_y) * random.random()))], shell=True, stdout=subprocess.PIPE)
+def clickRandom(min_x, min_y, max_x, max_y): #sends a Tap input in a random location within the range
+    #shellinputtap.bat PARAMETER FORMAT argv = %1 = port, %2 = x, %3 = y
+    item = subprocess.Popen(["shellinputtap.bat", str(emulator_port), #Gives all parameters to the ADB shell to be processessed as an input
+        str(min_x + ((max_x - min_x) * random.random())), str(min_y + ((max_y - min_y) * random.random()))], shell=True, stdout=subprocess.PIPE)
 
-def clickDragDown(min_x, min_y, max_x, max_y, min_distance, max_distance): #drags the mouse down at a random spot within a range
-    #port, x1, y1, x2, y2
+def clickDragDown(min_x, min_y, max_x, max_y, min_distance, max_distance): #sends a Swipe input in a random location within the range
+    #shellinputdrag.bat PARAMETER FORMAT argv = %1 = port, %2 = x1, %3 = y1, %4 = x2, %5 = y2
     tempx = min_x + ((max_x - min_x) * random.random())
     tempy = min_y + ((max_y - min_y) * random.random())
-    item = subprocess.Popen(["shellinputdrag.bat", str(emulator_port), str(tempx), str(tempy), 
-    str(tempx), str(tempy + min_distance + ((max_distance - min_distance) * random.random()))], shell=True, stdout=subprocess.PIPE)
+    item = subprocess.Popen(["shellinputdrag.bat", str(emulator_port), #Gives all parameters to the ADB shell to be processessed as an input
+        str(tempx), str(tempy), str(tempx), str(tempy + min_distance + ((max_distance - min_distance) * random.random()))], shell=True, stdout=subprocess.PIPE)
 
-def pixelSearch(interact_x, interact_y): #looks at a specific pixel and gives the hex color value
+def pixelSearch(interact_x, interact_y): #Looks at the given pixel and returns the hex color value
     stdoutlineformatted = "" #formatted byte string from byte variable stdoutline
 
     if interact_x > resolution_width or interact_y > resolution_height:
@@ -76,7 +75,7 @@ def pixelSearch(interact_x, interact_y): #looks at a specific pixel and gives th
     return temp
 
 
-#BOT FUNCTIONS [actions, settings, inventory-management...]
+#BOT CAPABILITY [actions, settings, inventory-management...]
 
 def centerCamera(): #Orients the camera to the North using the compass
     clickRandom(789, 38, 759, 10) #Clicks on the compass
@@ -154,6 +153,11 @@ def main():
     #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
     #TODO random circle ontop of randomness [multiple layers of randomness]
     #TODO add area support to pixelSearch instead of a single pixel
+    #TODO toggle the run off automatically on start
+    #TODO add new capability walking to the bank from SW varrock
+    #TODO add support for lumbridge tin and copper
+    #TODO add support for SW varrock tin and copper
+
 
     if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
         centerCamera()
@@ -168,6 +172,6 @@ def main():
         #SCRIPT QUEUE
         mineIronOreSouthWestVarrock()
 
-    print("\n#####################\n#######finished######\n#####################\n")
+    print("\n######################\n#######finished#######\n######################\n")
 
 main()
