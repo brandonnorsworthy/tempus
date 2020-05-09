@@ -182,7 +182,7 @@ def walkToVarrockEastBankFromSouthEastMine():
     sleep(10)
     click(1070, 108) #37
     sleep(8)
-    click(1105, 111) #45
+    click(1106, 111) #45
 
 def walkToSouthEastMineFromVarrockEastBank():
     click(1266, 122) #2
@@ -199,16 +199,17 @@ def walkToSouthEastMineFromVarrockEastBank():
     sleep(6)
     click(1158, 204) #39
     sleep(8)
-    click(1147, 162) #48
+    click(1147, 171) #48
 
 def main():
 
     if reset_camera == 'Test': #second argument on script startup, if true will reset camera; True/False
         for x in range(1,10):
-            walkToSouthEastMineFromVarrockEastBank()
-            sleepRandom(10,20)
             walkToVarrockEastBankFromSouthEastMine()
             sleepRandom(10,20)
+            walkToSouthEastMineFromVarrockEastBank()
+            sleepRandom(10,20)
+
 
         exit()
 
