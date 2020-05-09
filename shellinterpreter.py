@@ -24,11 +24,11 @@ script, loop_amount, reset_camera = argv
 #TODO add a distraction chance while performing a repetative action
     #TODO "accidentally" click a random hotbar
     #TODO move the camera around and then return it back
-    #TODO stop interacting for a random period of time up to ~3 minutes
+    #TODO stop interacting for a random period of time up to ~5 minutes
 
 emulator_port = int(5555) #hard coded for testing allows for all emulators to be interacted with apon change
-resolution_width = int(960)
-resolution_height = int(540)
+resolution_width = int(1280)
+resolution_height = int(720)
 
 #auto crunch area
 
@@ -98,29 +98,29 @@ def pixelSearch(interact_x, interact_y): #Looks at the given pixel and returns t
 #BOT CAPABILITY [actions, settings, inventory-management...]
 
 def centerCamera(): #Orients the camera to the North using the compass
-    clickRandom(789, 38, 759, 10) #Clicks on the compass
+    clickRandom(1029, 11, 1073, 54) #Clicks on the compass
     sleepRandom(0.5, 4)
-    clickDragDown(100, 51, 700, 360, 120, 200) #Drags down to have the camera point as far down as possible to the character
+    clickDragDown(200, 100, 700, 360, 168, 222) #Drags down to have the camera point as far down as possible to the character
     sleepRandom(1, 3)
 
 def setZoomLevel(): #Opens settings and adjusts zoom to an exact setting, in the middle of the bar
     #go to settings
-    clickRandom(909, 426, 943, 465)
+    clickRandom(1229, 570, 1276, 625)
     sleepRandom(1,3)
     #click middle of zoom bar
-    click(810, 295)
+    clickRandom(1100, 385, 1100, 395)
     sleepRandom(1,3)
     #close settings
-    clickRandom(909, 426, 943, 465)
+    clickRandom(1229, 570, 1276, 625)
     sleepRandom(1,3)
 
 def dropItem(itemSlotToDrop): #drops an item from a specific slot in the backpack
     #put the last slot at the front of the array so when you do a modulous division anything in the last slot returns 0 which
     #still will give the correct slot value without logic
-    inventoryCoords = [[850, 715, 760, 805, 850], #top left x
-            [468, 236, 275, 313, 352, 391, 429, 468], #top left y
-            [877, 742, 787, 832, 877], #bottom right x
-            [491, 262, 301, 339, 375, 414, 452, 491]] #bottom right y
+    inventoryCoords = [[1152, 972, 1032, 1092, 1152], #top left x
+        [627, 317, 368, 420, 472, 524, 574, 627], #top left y
+        [1189, 1009, 1069, 1129, 1189], #bottom right x
+        [656, 346, 396, 449, 502, 553, 604, 656]] #bottom right y
 
     clickRandom((inventoryCoords[0][(itemSlotToDrop % 4)]), 
         (inventoryCoords[1][math.ceil(itemSlotToDrop / 4)]), 
@@ -164,18 +164,60 @@ def mineRock(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color
 
 #BOTTING SCRIPTS [skilling, money-makers...]
 
-def mineIronOreSouthWestVarrock(): #Mine South-West of Varrock contains two close iron rocks, stand between both iron rocks, one on the West, one to the North
-    mineRock(10, 15, '795545', 440, 285, 426, 258, 452, 289) #West iron rock
-    mineRock(10, 15, '765143', 463, 225, 466, 219, 496, 244) #North iron rock
+def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two close iron rocks, stand between both iron rocks, one on the East, one to the North
+    mineRock(15, 15, '735041', 585, 390, 548, 355, 598, 401) #East iron rock
+    mineRock(15, 15, '735041', 622, 309, 606, 299, 652, 341) #North iron rock
+
+def walkToVarrockEastBankFromSouthEastMine():
+    #route1
+    #click(1168, 119) #iron spot
+    #sleepRandom(1,3)
+    click(1184, 24) #1
+    sleep(8)
+    click(1158, 14) #9
+    sleep(9)
+    click(1130, 24) #18
+    sleep(9)
+    click(1099, 38) #27
+    sleep(10)
+    click(1070, 108) #37
+    sleep(8)
+    click(1105, 111) #45
+
+def walkToSouthEastMineFromVarrockEastBank():
+    click(1266, 122) #2
+    sleep(7)
+    click(1247, 172) #10
+    sleep(6)
+    click(1215, 201) #16
+    sleep(5)
+    click(1210, 204) #21
+    sleep(7)
+    click(1176, 212) #28
+    sleep(5)
+    click(1168, 219) #33
+    sleep(6)
+    click(1158, 204) #39
+    sleep(8)
+    click(1147, 162) #48
 
 def main():
+
+    if reset_camera == 'Test': #second argument on script startup, if true will reset camera; True/False
+        for x in range(1,10):
+            walkToSouthEastMineFromVarrockEastBank()
+            sleepRandom(10,20)
+            walkToVarrockEastBankFromSouthEastMine()
+            sleepRandom(10,20)
+
+        exit()
 
     if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
         centerCamera()
         setZoomLevel()
+        exit()
 
     for current_loop in range(1,int(loop_amount) - 1): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
-    
         if ((current_loop % 14) == 0) and (current_loop != 0): #After collecting a full inventory it will drop everything onto the ground
             dropInventory(0)
         
@@ -183,7 +225,7 @@ def main():
             print("main(): Current Loop is: " + str(current_loop) + " out of " + str(loop_amount))
         
         #SCRIPT QUEUE
-        mineIronOreSouthWestVarrock()
+        mineIronOreSouthEastVarrock()
 
     print("\n######################\n#######FINISHED#######\n######################\n")
 

@@ -1,0 +1,18 @@
+OSRS
+North Facing
+Up all the way
+Zoom Max
+Brightness Max
+FPS 30
+Action Button On
+Attack Players Hidden
+NPC Attack Hidden
+
+Bluestacks
+1280 x 720
+160 DPI
+Advanced
+- ONE PLUS5
+TMobile
+
+Enable ADB
