@@ -114,7 +114,7 @@ def setZoomLevel(): #Opens settings and adjusts zoom to an exact setting, in the
     clickRandom(1229, 570, 1276, 625)
     sleepRandom(1,3)
 
-def dropItem(itemSlotToDrop): #drops an item from a specific slot in the backpack
+def clickItem(itemSlotToDrop): #clicks an item from a specific slot in the backpack
     #put the last slot at the front of the array so when you do a modulous division anything in the last slot returns 0 which
     #still will give the correct slot value without logic
     inventoryCoords = [[1152, 972, 1032, 1092, 1152], #top left x
@@ -129,7 +129,7 @@ def dropItem(itemSlotToDrop): #drops an item from a specific slot in the backpac
 
 def dropInventory(itemSlotsToSkip): #drops all items in invetory skipping first slots up to a set amount //  can be set to 0 to clear inventory completely
     for x in range(itemSlotsToSkip, 29):
-        dropItem(x)
+        clickItem(x)
         sleepRandom(0.15, 1.15)
 
 def mineRock(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color_Y, clickArea_x1, clickArea_y1, clickArea_x2, clickArea_y2): #harvest any resource given the custom arguments
@@ -245,9 +245,14 @@ def walkToSouthEastMineFromVarrockEastBank():
     fixPositionVarrockEastBank()
 
 def bankAtVarrockEastBank():
-    click(1161, 178)
-    sleepRandom(5,15)
-    clickRandom(618, 390, 679, 464)
+    click(1161, 178) #click on minimap where tellers are
+    sleepRandom(7,8)
+    clickRandom(608, 400, 653, 440) #click on bank stall
+    sleepRandom(7,8)
+    clickItem(math.ceil(random.random() * 20) + 1) #deposit an item
+    sleep(7)
+    click(1162, 78) #walk back to the hotspot outside the bank
+    sleep(7)
 
 def main():
 
@@ -261,7 +266,7 @@ def main():
             print("main(): Current Loop is: " + str(current_loop) + " out of " + str(loop_amount))
         
         #SCRIPT QUEUE
-        fixPositionVarrockEastBank()
+        mineIronOreSouthEastVarrock()
 
     print("\n######################\n#######FINISHED#######\n######################\n")
 
