@@ -21,6 +21,9 @@ script, loop_amount, reset_camera = argv
 #TODO go one by one through functions and see if they can be more efficent or smaller
 #TODO add support for SW varrock tin and copper
 #TODO add option for either droping materials or banking them
+#TODO circle of randomness
+#TODO add power woodcutting
+#TODO add random ge purchases
 #TODO add a distraction chance while performing a repetative action
     #TODO "accidentally" click a random hotbar
     #TODO move the camera around and then return it back
@@ -184,6 +187,42 @@ def fixPositionVarrockEastBank():
 def bankSettings():
     clickRandom()
 
+
+#WEB WALKER
+
+def walkToVarrockEastBankFromSouthEastMine(): #part of the web walker network with nodes
+    click(1184, 24) #1
+    sleep(8)
+    click(1158, 14) #9
+    sleep(9)
+    click(1130, 24) #18
+    sleep(9)
+    click(1099, 38) #27
+    sleep(10)
+    click(1070, 108) #37
+    sleep(8)
+    click(1106, 111) #45
+    sleep(9)
+
+def walkToSouthEastMineFromVarrockEastBank(): #part of the web walker network with nodes
+    click(1266, 122) #2
+    sleep(7)
+    click(1247, 172) #10
+    sleep(6)
+    click(1215, 201) #16
+    sleep(5)
+    click(1210, 204) #21
+    sleep(7)
+    click(1176, 212) #28
+    sleep(5)
+    click(1168, 219) #33
+    sleep(6)
+    click(1158, 204) #39
+    sleep(8)
+    click(1147, 171) #48
+    sleep(9)
+
+
 #BOTTING SCRIPTS [skilling, money-makers...]
 
 def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two close iron rocks, stand between both iron rocks, one on the East, one to the North
@@ -215,39 +254,7 @@ def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two clos
         sleep(3)
     return
 
-def walkToVarrockEastBankFromSouthEastMine():
-    click(1184, 24) #1
-    sleep(8)
-    click(1158, 14) #9
-    sleep(9)
-    click(1130, 24) #18
-    sleep(9)
-    click(1099, 38) #27
-    sleep(10)
-    click(1070, 108) #37
-    sleep(8)
-    click(1106, 111) #45
-    sleep(9)
-
-def walkToSouthEastMineFromVarrockEastBank():
-    click(1266, 122) #2
-    sleep(7)
-    click(1247, 172) #10
-    sleep(6)
-    click(1215, 201) #16
-    sleep(5)
-    click(1210, 204) #21
-    sleep(7)
-    click(1176, 212) #28
-    sleep(5)
-    click(1168, 219) #33
-    sleep(6)
-    click(1158, 204) #39
-    sleep(8)
-    click(1147, 171) #48
-    sleep(9)
-
-def bankAtVarrockEastBank():
+def bankAtVarrockEastBank(): #bank items at varrock east bank needs expansion
     click(1161, 178) #click on minimap where tellers are
     sleepRandom(7,8)
     clickRandom(608, 400, 653, 440) #click on bank stall
