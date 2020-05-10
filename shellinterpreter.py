@@ -161,17 +161,51 @@ def mineRock(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color
                 sleep(0.5)
                 continue
 
+def fixPositionVarrockEastBank():
+    leftSidePositionCorrect = bool(shadeVariationTest(pixelSearch(1146, 178), 'fcfc03', 10))
+    rightSidePositionCorrect = bool(shadeVariationTest(pixelSearch(1175, 178), 'fcfc03', 10))
+    #if in the right spot
+    if (leftSidePositionCorrect and rightSidePositionCorrect):
+        print("perfect")
+    elif not leftSidePositionCorrect and rightSidePositionCorrect:
+        click(1167, 120)
+    elif leftSidePositionCorrect and not rightSidePositionCorrect:
+        click(1157, 120)
+    else:
+        print('lost')
+    sleep(5)
+
+def bankSettings():
+    clickRandom()
 
 #BOTTING SCRIPTS [skilling, money-makers...]
 
 def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two close iron rocks, stand between both iron rocks, one on the East, one to the North
-    mineRock(15, 15, '735041', 585, 390, 548, 355, 598, 401) #East iron rock
-    mineRock(15, 15, '735041', 622, 309, 606, 299, 652, 341) #North iron rock
+    inventoryFull = False
+    powerMining = False
+
+    while not inventoryFull:
+        mineRock(15, 15, '735041', 585, 390, 548, 355, 598, 401) #East iron rock
+        if shadeVariationTest(pixelSearch(1175, 640), '5d3e30', 0):
+            inventoryFull = True
+            print(inventoryFull)
+            continue
+        mineRock(15, 15, '735041', 622, 309, 606, 299, 652, 341) #North iron rock    
+        if shadeVariationTest(pixelSearch(1175, 640), '5d3e30', 0):
+            inventoryFull = True
+            print(inventoryFull)
+            continue
+    
+    if not powerMining:
+        click(1168, 119) #iron spot
+        sleepRandom(1,3)
+        walkToVarrockEastBankFromSouthEastMine()
+        sleepRandom(10,20)
+        walkToSouthEastMineFromVarrockEastBank()
+    
+    return
 
 def walkToVarrockEastBankFromSouthEastMine():
-    #route1
-    #click(1168, 119) #iron spot
-    #sleepRandom(1,3)
     click(1184, 24) #1
     sleep(8)
     click(1158, 14) #9
@@ -183,6 +217,7 @@ def walkToVarrockEastBankFromSouthEastMine():
     click(1070, 108) #37
     sleep(8)
     click(1106, 111) #45
+    sleep(9)
 
 def walkToSouthEastMineFromVarrockEastBank():
     click(1266, 122) #2
@@ -200,18 +235,14 @@ def walkToSouthEastMineFromVarrockEastBank():
     click(1158, 204) #39
     sleep(8)
     click(1147, 171) #48
+    sleep(9)
+
+def bankAtVarrockEastBank():
+    click(1161, 178)
+    sleepRandom(5,15)
+    clickRandom(618, 390, 679, 464)
 
 def main():
-
-    if reset_camera == 'Test': #second argument on script startup, if true will reset camera; True/False
-        for x in range(1,10):
-            walkToVarrockEastBankFromSouthEastMine()
-            sleepRandom(10,20)
-            walkToSouthEastMineFromVarrockEastBank()
-            sleepRandom(10,20)
-
-
-        exit()
 
     if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
         centerCamera()
@@ -219,14 +250,11 @@ def main():
         exit()
 
     for current_loop in range(1,int(loop_amount) - 1): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
-        if ((current_loop % 14) == 0) and (current_loop != 0): #After collecting a full inventory it will drop everything onto the ground
-            dropInventory(0)
-        
         if ((current_loop % (math.floor(int(loop_amount) / 4))) == 0): #Keep user updated on progress of current run
             print("main(): Current Loop is: " + str(current_loop) + " out of " + str(loop_amount))
         
         #SCRIPT QUEUE
-        mineIronOreSouthEastVarrock()
+        fixPositionVarrockEastBank()
 
     print("\n######################\n#######FINISHED#######\n######################\n")
 
