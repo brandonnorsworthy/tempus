@@ -23,10 +23,14 @@ After downloading navigate to the installation location of tempus via Command Pr
 
 **Mining**
 * South-West Varrock Iron Mine
+* Web Walking to Varrock East Bank
 
 ## Planned
 ```
 #TODO call python script specifically for that emulator(port)
+#TODO webwalker interface
+#TODO shows where all the connected bots are one a map
+#TODO front end web face for bot control
 #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
 #TODO random circle ontop of randomness [multiple layers of randomness]
 #TODO add area support to pixelSearch instead of a single pixel
@@ -36,15 +40,18 @@ After downloading navigate to the installation location of tempus via Command Pr
 #TODO add support for connecting automatically
 #TODO add function for entering text from script
 #TODO add basic UI so i dont have to type shit out
-#TODO ADD BREAKS WATCH YOUTUBE VIDEO FOR TIMES
 #TODO add more clarification to comments
+#TODO ADD BREAKS WATCH YOUTUBE VIDEO FOR TIMES
 #TODO go one by one through functions and see if they can be more efficent or smaller
 #TODO add support for SW varrock tin and copper
 #TODO add option for either droping materials or banking them
+#TODO circle of randomness
+#TODO add power woodcutting
+#TODO add random ge purchases
 #TODO add a distraction chance while performing a repetative action
 #TODO "accidentally" click a random hotbar
 #TODO move the camera around and then return it back
-#TODO stop interacting for a random period of time up to ~3 minutes
+#TODO stop interacting for a random period of time up to ~5 minutes
 ```
 
 ## Copyright
