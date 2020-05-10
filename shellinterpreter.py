@@ -162,18 +162,24 @@ def mineRock(oreColorThreshold, maxWaitAmount, oreHexColorString, color_X, color
                 continue
 
 def fixPositionVarrockEastBank():
-    leftSidePositionCorrect = bool(shadeVariationTest(pixelSearch(1146, 178), 'fcfc03', 10))
-    rightSidePositionCorrect = bool(shadeVariationTest(pixelSearch(1175, 178), 'fcfc03', 10))
-    #if in the right spot
-    if (leftSidePositionCorrect and rightSidePositionCorrect):
-        print("perfect")
-    elif not leftSidePositionCorrect and rightSidePositionCorrect:
-        click(1167, 120)
-    elif leftSidePositionCorrect and not rightSidePositionCorrect:
-        click(1157, 120)
-    else:
-        print('lost')
-    sleep(5)
+    inTheCorrectPosition = False
+
+    while not inTheCorrectPosition:
+        leftSidePositionCorrect = bool(shadeVariationTest(pixelSearch(1146, 178), 'fcfc03', 10))
+        rightSidePositionCorrect = bool(shadeVariationTest(pixelSearch(1175, 178), 'fcfc03', 10))
+        #if in the right spot
+        if (leftSidePositionCorrect and rightSidePositionCorrect):
+            print("perfect")
+            inTheCorrectPosition()
+            continue
+        elif not leftSidePositionCorrect and rightSidePositionCorrect:
+            click(1167, 120)
+        elif leftSidePositionCorrect and not rightSidePositionCorrect:
+            click(1157, 120)
+        else:
+            print("fixPositionVarrockEastBank(): got lost exiting script")
+            exit()
+        sleep(5)
 
 def bankSettings():
     clickRandom()
@@ -236,6 +242,7 @@ def walkToSouthEastMineFromVarrockEastBank():
     sleep(8)
     click(1147, 171) #48
     sleep(9)
+    fixPositionVarrockEastBank()
 
 def bankAtVarrockEastBank():
     click(1161, 178)
