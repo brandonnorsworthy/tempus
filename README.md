@@ -1,4 +1,4 @@
-# ZiaBot
+# Tempus
 
 ## About
 
@@ -15,7 +15,7 @@ To set up the script you also need to download **Python3** and **BlueStacks**
 * Second go into the options and change the settings to **Resolution 960x540** and **DPI 240**
 * The real resolution on your monitor is irrelevant so don't try just resizing the window that doesn't help with anything
 
-After downloading navigate to the installation location of ZiaBot via Command Prompt and use the command `py shellinterpreter.py <count> <reset_camera>`
+After downloading navigate to the installation location of tempus via Command Prompt and use the command `py shellinterpreter.py <count> <reset_camera>`
 * <count> -> (1/9999) The number of times the script will be ran
 * <reset_camera> -> (True/False) Whether or not you need your game set to the specific settings for the bot to work correctly on the first startup this will always need to be 'True'
 
