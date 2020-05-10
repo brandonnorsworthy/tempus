@@ -46,13 +46,13 @@ class Window(object):
         self.lblAmountConnected = Label(self.BodyFrame, text='please refresh', font='Roboto, 10', padx=10, pady=10, bd=0, bg=colorShadeNormal, fg='#fff')
         self.lblAmountConnected.pack(side=LEFT, anchor=NW)
 
-        self.btnRefreshEmulators = Button(self.BodyFrame, text='Refresh', font='Roboto', bd=0, bg=colorMain, activebackground=colorShadeLighter, activeforeground='#fff', command=self.btnRefreshEmulatorsPushed)
+        self.btnRefreshEmulators = Button(self.BodyFrame, text='Refresh', font='Roboto', bd=0, bg=colorMenuShade, activebackground=colorMenuShade, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
         self.btnRefreshEmulators.pack(side=RIGHT, anchor=NE)
 
         self.BodyCenterFrame = Frame(self.BodyFrame, bg=colorShadeNormal, borderwidth=10)
         self.BodyCenterFrame.pack(fill=BOTH, expand=Y)
 
-        self.lblTitle = Label(self.BodyCenterFrame, text='This is where you can monitor your bots live with Tasks, Scripts, and whether they are Connected.', pady=35, bg=colorShadeNormal, fg='#fff')
+        self.lblTitle = Label(self.BodyFrame, text='This is where you can monitor your bots live with Tasks, Scripts, and whether they are Connected.', pady=45, bg=colorShadeNormal, fg='#fff')
         self.lblTitle.pack(fill=X, anchor=N)
 
 
@@ -126,6 +126,7 @@ class Window(object):
             self.lblAmountConnected['text'] = 'Nothing connected, are you sure BlueStacks is running?'
         print(connected)
         self.btnRefreshEmulators['state'] = ACTIVE
+        self.btnRefreshEmulators['bg'] = colorMain
 
 app = Tk()
 app.iconbitmap('src/tempus.ico')
