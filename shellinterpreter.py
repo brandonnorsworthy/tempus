@@ -170,7 +170,7 @@ def fixPositionVarrockEastBank():
         #if in the right spot
         if (leftSidePositionCorrect and rightSidePositionCorrect):
             print("perfect")
-            inTheCorrectPosition()
+            inTheCorrectPosition = True
             continue
         elif not leftSidePositionCorrect and rightSidePositionCorrect:
             click(1167, 120)
@@ -192,12 +192,12 @@ def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two clos
 
     while not inventoryFull:
         mineRock(15, 15, '735041', 585, 390, 548, 355, 598, 401) #East iron rock
-        if shadeVariationTest(pixelSearch(1175, 640), '5d3e30', 0):
+        if shadeVariationTest(pixelSearch(1175, 640), '5c3e2f', 10):
             inventoryFull = True
             print(inventoryFull)
             continue
         mineRock(15, 15, '735041', 622, 309, 606, 299, 652, 341) #North iron rock    
-        if shadeVariationTest(pixelSearch(1175, 640), '5d3e30', 0):
+        if shadeVariationTest(pixelSearch(1175, 640), '5c3e2f', 10):
             inventoryFull = True
             print(inventoryFull)
             continue
@@ -207,8 +207,12 @@ def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two clos
         sleepRandom(1,3)
         walkToVarrockEastBankFromSouthEastMine()
         sleepRandom(10,20)
+        fixPositionVarrockEastBank()
+        sleep(2)
+        bankAtVarrockEastBank()
+        sleep(2)
         walkToSouthEastMineFromVarrockEastBank()
-    
+        sleep(3)
     return
 
 def walkToVarrockEastBankFromSouthEastMine():
@@ -242,7 +246,6 @@ def walkToSouthEastMineFromVarrockEastBank():
     sleep(8)
     click(1147, 171) #48
     sleep(9)
-    fixPositionVarrockEastBank()
 
 def bankAtVarrockEastBank():
     click(1161, 178) #click on minimap where tellers are
