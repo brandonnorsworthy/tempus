@@ -7,6 +7,9 @@ from sys import argv
 script, loop_amount, reset_camera = argv
 
 #TODO call python script specifically for that emulator(port)
+#TODO webwalker interface
+#TODO shows where all the connected bots are one a map
+#TODO front end web face for bot control
 #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
 #TODO random circle ontop of randomness [multiple layers of randomness]
 #TODO add area support to pixelSearch instead of a single pixel
