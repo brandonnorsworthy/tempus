@@ -11,8 +11,11 @@ colorShadeLighter = '#5f626e'
 colorShadeNormal = '#383940'
 colorShadeDarker = '#222226'
 
+currentlyConnectedEmulators = [['not connected','','','']]
+
 class Window(object):
     def __init__(self, master):
+
         self.master = master
         self.master.title("tempus")
         self.master.geometry("630x405+300+200")
@@ -40,22 +43,44 @@ class Window(object):
         self.btnHelp = Button(self.MenuBar, text='Help', font='Roboto', bd=0, bg=colorMenuShade, activebackground=colorMenuShade, activeforeground='#fff', fg='#fff', command=self.helpPushed)
         self.btnHelp.pack(side=LEFT,fill=BOTH,expand=Y)
 
-        self.BodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=10)
-        self.BodyFrame.pack(fill=BOTH, expand=Y)
+        #TOP FULL BODY FRAME
+        self.OverviewBodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=2)
+        self.OverviewBodyFrame.pack(fill=BOTH, expand=Y)
 
-        self.lblAmountConnected = Label(self.BodyFrame, text='please refresh', font='Roboto, 10', padx=10, pady=10, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblAmountConnected.pack(side=LEFT, anchor=NW)
+        #TOP BODY SHOWING CONNECTED
+        self.OverviewTopBodyFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.OverviewTopBodyFrame.pack(fill=X, anchor=N)
+        
+        self.lblAmountConnected = Label(self.OverviewTopBodyFrame, text='Device(s) Connected: 0, Please Refresh', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
+        self.btnRefreshEmulators = Button(self.OverviewTopBodyFrame, text='Refresh', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
+        self.btnRefreshEmulators.place(relx=1, x=0,y=0, anchor=NE)
 
-        self.btnRefreshEmulators = Button(self.BodyFrame, text='Refresh', font='Roboto', bd=0, bg=colorMenuShade, activebackground=colorMenuShade, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
-        self.btnRefreshEmulators.pack(side=RIGHT, anchor=NE)
+        #OVERVIEW CENTER BODY
+        self.OverviewBodyCenterFrame = Frame(self.OverviewBodyFrame, bg=colorMain, bd=0)
+        self.OverviewBodyCenterFrame.pack(fill=BOTH, expand=Y)
 
-        self.BodyCenterFrame = Frame(self.BodyFrame, bg=colorShadeNormal, borderwidth=10)
-        self.BodyCenterFrame.pack(fill=BOTH, expand=Y)
+        self.lblTitleName = Label(self.OverviewBodyCenterFrame, text='Name', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
+        self.lblTitleName.grid(sticky=W, row=0, column=0)
+        self.lblCurrentAction = Label(self.OverviewBodyCenterFrame, text='Current Action', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
+        self.lblCurrentAction.grid(sticky=W, row=0, column=1)
+        self.lblTitleThoughts = Label(self.OverviewBodyCenterFrame, text='Thoughts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
+        self.lblTitleThoughts.grid(sticky=W, row=0, column=2)
+        self.lblTitleRuntime = Label(self.OverviewBodyCenterFrame, text='Runtime', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
+        self.lblTitleRuntime.grid(sticky=W, row=0, column=3)
 
-        self.lblTitle = Label(self.BodyFrame, text='This is where you can monitor your bots live with Tasks, Scripts, and whether they are Connected.', pady=45, bg=colorShadeNormal, fg='#fff')
-        self.lblTitle.pack(fill=X, anchor=N)
+        self.overviewCreateEmulatorLine('not connected', '', '', '')
 
+        self.OverviewBodyCenterFrame.columnconfigure(0, weight=3)
+        self.OverviewBodyCenterFrame.columnconfigure(1, weight=3)
+        self.OverviewBodyCenterFrame.columnconfigure(2, weight=3)
+        self.OverviewBodyCenterFrame.columnconfigure(3, weight=0)
+        #BOTTOM BODY
+        self.BodyBottomFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.BodyBottomFrame.pack(fill=X, anchor=S)
 
+        self.lblTitle = Label(self.BodyBottomFrame, text='This is where you can monitor your bots live with current Tasks, Thoughts, and whether they are Connected.', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
 
     def overviewPushed(self):
         if (self.btnOverview['state'] == NORMAL):
@@ -119,14 +144,42 @@ class Window(object):
 
     def btnRefreshEmulatorsPushed(self):
         self.btnRefreshEmulators['state'] = DISABLED
+        self.btnRefreshEmulators['bg'] = colorMain
+        self.lblAmountConnected['text'] = 'Device(s) Connected: Refreshing'
         connected = shellconnect.connectToBluestacks()
+
         if len(connected) > 0:
             self.lblAmountConnected['text'] = 'Device(s) Connected: ' + str(len(connected))
+
+            for x in range(0, len(connected)):
+                print(x)
+                currentlyConnectedEmulators = [[]]
+                currentlyConnectedEmulators.insert(x, ['emulator: ' + str(connected[x]),'nothing','nothing','0:00:00'])
+                self.overviewCreateLabels(currentlyConnectedEmulators[x][0],currentlyConnectedEmulators[x][1],currentlyConnectedEmulators[x][2],currentlyConnectedEmulators[x][3],x+1)
+
         else:
-            self.lblAmountConnected['text'] = 'Nothing connected, are you sure BlueStacks is running?'
-        print(connected)
+            self.lblAmountConnected['text'] = 'Device(s) Connected: 0, Are you sure BlueStacks is running?'
+
+        
         self.btnRefreshEmulators['state'] = ACTIVE
-        self.btnRefreshEmulators['bg'] = colorMain
+        self.btnRefreshEmulators['bg'] = colorMenuShade
+
+    def overviewCreateLabels(self, name, action, thoughts, runtime, currentRow):
+        Label(self.OverviewBodyCenterFrame, text=name, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=0)
+        Label(self.OverviewBodyCenterFrame, text=action, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=1)
+        Label(self.OverviewBodyCenterFrame, text=thoughts, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=2)
+        Label(self.OverviewBodyCenterFrame, text=runtime, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=3)
+
+    def overviewCreateEmulatorLine(self, name, action, thoughts, runtime):
+        self.lblEmulator1Name = Label(self.OverviewBodyCenterFrame, text=name, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblEmulator1Name.grid(sticky=W, row=1, column=0)
+        self.lblEmulator1Action = Label(self.OverviewBodyCenterFrame, text=action, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblEmulator1Action.grid(sticky=W, row=1, column=1)
+        self.lblEmulator1Thoughts = Label(self.OverviewBodyCenterFrame, text=thoughts, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblEmulator1Thoughts.grid(sticky=W, row=1, column=2)
+        self.lblEmulator1Runtime = Label(self.OverviewBodyCenterFrame, text=runtime, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblEmulator1Runtime.grid(sticky=W, row=1, column=3)
+
 
 app = Tk()
 app.iconbitmap('src/tempus.ico')
