@@ -162,8 +162,6 @@ class Window(object):
         self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
         self.btnRefreshEmulators = Button(self.OverviewTopBodyFrame, text='Refresh', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
         self.btnRefreshEmulators.place(relx=1, x=0,y=0, anchor=NE)
-        self.btnDelEmulators = Button(self.OverviewTopBodyFrame, text='Delete', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.overviewDestroyAllLabels)
-        self.btnDelEmulators.place(relx=1, x=-65,y=0, anchor=NE)
 
         #OVERVIEW CENTER BODY
         self.OverviewBodyCenterFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, bd=0)
@@ -202,12 +200,10 @@ class Window(object):
         self.lblTitleName = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=0)
         self.lblCurrentAction = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=1)
         self.lblTitleThoughts = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=2)
-        self.lblTitleRuntime = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=3)
-
+        
         self.ScriptsBodyCenterFrame.columnconfigure(0, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(1, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(2, weight=3)
-        self.ScriptsBodyCenterFrame.columnconfigure(3, weight=0)
 
         #BOTTOM BODY
         self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
@@ -217,6 +213,14 @@ class Window(object):
         self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
 
     def createSettingsTab(self):
+        #TOP FULL BODY FRAME
+        self.SettingsBodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=2)
+        self.SettingsBodyFrame.pack(fill=BOTH, expand=Y)
+
+        #TOP BODY SHOWING CONNECTED
+        self.SettingsTopBodyFrame = Frame(self.SettingsBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.SettingsTopBodyFrame.pack(fill=X, anchor=N)
+
         #Settings CENTER BODY
         self.SettingsBodyCenterFrame = Frame(self.SettingsBodyFrame, bg=colorShadeNormal, bd=0)
         self.SettingsBodyCenterFrame.pack(fill=BOTH, expand=Y)
@@ -229,6 +233,14 @@ class Window(object):
         self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
 
     def createHelpTab(self):
+        #TOP FULL BODY FRAME
+        self.HelpBodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=2)
+        self.HelpBodyFrame.pack(fill=BOTH, expand=Y)
+
+        #TOP BODY SHOWING CONNECTED
+        self.HelpTopBodyFrame = Frame(self.HelpBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.HelpTopBodyFrame.pack(fill=X, anchor=N)
+
         #Help CENTER BODY
         self.HelpBodyCenterFrame = Frame(self.HelpBodyFrame, bg=colorShadeNormal, bd=0)
         self.HelpBodyCenterFrame.pack(fill=BOTH, expand=Y)
