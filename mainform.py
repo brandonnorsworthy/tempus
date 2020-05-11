@@ -19,7 +19,7 @@ class Window(object):
         self.master = master
         self.master.title("tempus")
         self.master.geometry("630x405+300+200")
-        self.master.config(bg='#fff')
+        self.master.configure(bg=colorShadeNormal)
 
         self.master.resizable(0,0)
 
@@ -69,7 +69,7 @@ class Window(object):
         self.lblTitleRuntime = Label(self.OverviewBodyCenterFrame, text='Runtime', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
         self.lblTitleRuntime.grid(sticky=W, row=0, column=3)
 
-        self.overviewCreateEmulatorLine('not connected', '', '', '')
+        self.btnRefreshEmulatorsPushed()
 
         self.OverviewBodyCenterFrame.columnconfigure(0, weight=3)
         self.OverviewBodyCenterFrame.columnconfigure(1, weight=3)
@@ -148,37 +148,28 @@ class Window(object):
         self.lblAmountConnected['text'] = 'Device(s) Connected: Refreshing'
         connected = shellconnect.connectToBluestacks()
 
-        if len(connected) > 0:
-            self.lblAmountConnected['text'] = 'Device(s) Connected: ' + str(len(connected))
-
-            for x in range(0, len(connected)):
-                print(x)
-                currentlyConnectedEmulators = [[]]
-                currentlyConnectedEmulators.insert(x, ['emulator: ' + str(connected[x]),'nothing','nothing','0:00:00'])
-                self.overviewCreateLabels(currentlyConnectedEmulators[x][0],currentlyConnectedEmulators[x][1],currentlyConnectedEmulators[x][2],currentlyConnectedEmulators[x][3],x+1)
-
-        else:
-            self.lblAmountConnected['text'] = 'Device(s) Connected: 0, Are you sure BlueStacks is running?'
-
+        self.lblAmountConnected['text'] = 'Device(s) Connected: ' + str(len(connected))
+        self.overviewRecreateLabels(connected)
         
         self.btnRefreshEmulators['state'] = ACTIVE
         self.btnRefreshEmulators['bg'] = colorMenuShade
+
+    def overviewRecreateLabels(self, connected):
+        if len(connected) > 0:
+            currentlyConnectedEmulators = [[]]
+            for x in range(0, len(connected)):
+                print(x)
+                currentlyConnectedEmulators.insert(x, ['emulator:' + str(connected[x]),'nothing','nothing','0:00:00'])
+                self.overviewCreateLabels(currentlyConnectedEmulators[x][0],currentlyConnectedEmulators[x][1],currentlyConnectedEmulators[x][2],currentlyConnectedEmulators[x][3],x+1)
+        else:
+            self.lblAmountConnected['text'] = 'Device(s) Connected: 0, Are you sure BlueStacks is running?'
+            self.overviewCreateLabels('not connected', '', '', '', 1)
 
     def overviewCreateLabels(self, name, action, thoughts, runtime, currentRow):
         Label(self.OverviewBodyCenterFrame, text=name, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=0)
         Label(self.OverviewBodyCenterFrame, text=action, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=1)
         Label(self.OverviewBodyCenterFrame, text=thoughts, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=2)
-        Label(self.OverviewBodyCenterFrame, text=runtime, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=3)
-
-    def overviewCreateEmulatorLine(self, name, action, thoughts, runtime):
-        self.lblEmulator1Name = Label(self.OverviewBodyCenterFrame, text=name, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblEmulator1Name.grid(sticky=W, row=1, column=0)
-        self.lblEmulator1Action = Label(self.OverviewBodyCenterFrame, text=action, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblEmulator1Action.grid(sticky=W, row=1, column=1)
-        self.lblEmulator1Thoughts = Label(self.OverviewBodyCenterFrame, text=thoughts, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblEmulator1Thoughts.grid(sticky=W, row=1, column=2)
-        self.lblEmulator1Runtime = Label(self.OverviewBodyCenterFrame, text=runtime, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblEmulator1Runtime.grid(sticky=W, row=1, column=3)
+        Label(self.OverviewBodyCenterFrame, text=runtime, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=E, row=currentRow, column=3)
 
 
 app = Tk()
