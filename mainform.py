@@ -55,19 +55,14 @@ class Window(object):
         self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
         self.btnRefreshEmulators = Button(self.OverviewTopBodyFrame, text='Refresh', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
         self.btnRefreshEmulators.place(relx=1, x=0,y=0, anchor=NE)
+        self.btnDelEmulators = Button(self.OverviewTopBodyFrame, text='Delete', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.overviewDestroyAllLabels)
+        self.btnDelEmulators.place(relx=1, x=-65,y=0, anchor=NE)
 
         #OVERVIEW CENTER BODY
-        self.OverviewBodyCenterFrame = Frame(self.OverviewBodyFrame, bg=colorMain, bd=0)
+        self.OverviewBodyCenterFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, bd=0)
         self.OverviewBodyCenterFrame.pack(fill=BOTH, expand=Y)
 
-        self.lblTitleName = Label(self.OverviewBodyCenterFrame, text='Name', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
-        self.lblTitleName.grid(sticky=W, row=0, column=0)
-        self.lblCurrentAction = Label(self.OverviewBodyCenterFrame, text='Current Action', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
-        self.lblCurrentAction.grid(sticky=W, row=0, column=1)
-        self.lblTitleThoughts = Label(self.OverviewBodyCenterFrame, text='Thoughts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
-        self.lblTitleThoughts.grid(sticky=W, row=0, column=2)
-        self.lblTitleRuntime = Label(self.OverviewBodyCenterFrame, text='Runtime', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter)
-        self.lblTitleRuntime.grid(sticky=W, row=0, column=3)
+        self.overviewCreateTitleLabels()
 
         self.btnRefreshEmulatorsPushed()
 
@@ -149,28 +144,39 @@ class Window(object):
         connected = shellconnect.connectToBluestacks()
 
         self.lblAmountConnected['text'] = 'Device(s) Connected: ' + str(len(connected))
-        self.overviewRecreateLabels(connected)
+        self.overviewRecreateConnectedLabels(connected)
         
         self.btnRefreshEmulators['state'] = ACTIVE
         self.btnRefreshEmulators['bg'] = colorMenuShade
 
-    def overviewRecreateLabels(self, connected):
+    def overviewRecreateConnectedLabels(self, connected):
+        self.overviewDestroyAllLabels()
         if len(connected) > 0:
             currentlyConnectedEmulators = [[]]
             for x in range(0, len(connected)):
-                print(x)
                 currentlyConnectedEmulators.insert(x, ['emulator:' + str(connected[x]),'nothing','nothing','0:00:00'])
-                self.overviewCreateLabels(currentlyConnectedEmulators[x][0],currentlyConnectedEmulators[x][1],currentlyConnectedEmulators[x][2],currentlyConnectedEmulators[x][3],x+1)
+                self.overviewCreateConnectedLabels(currentlyConnectedEmulators[x][0],currentlyConnectedEmulators[x][1],currentlyConnectedEmulators[x][2],currentlyConnectedEmulators[x][3],x+1)
         else:
             self.lblAmountConnected['text'] = 'Device(s) Connected: 0, Are you sure BlueStacks is running?'
-            self.overviewCreateLabels('not connected', '', '', '', 1)
+            self.overviewCreateConnectedLabels('not connected', '', '', '', 1)
 
-    def overviewCreateLabels(self, name, action, thoughts, runtime, currentRow):
+    def overviewCreateConnectedLabels(self, name, action, thoughts, runtime, currentRow):
         Label(self.OverviewBodyCenterFrame, text=name, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=0)
         Label(self.OverviewBodyCenterFrame, text=action, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=1)
         Label(self.OverviewBodyCenterFrame, text=thoughts, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=W, row=currentRow, column=2)
         Label(self.OverviewBodyCenterFrame, text=runtime, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff').grid(sticky=E, row=currentRow, column=3)
 
+    def overviewCreateTitleLabels(self):
+        self.lblTitleName = Label(self.OverviewBodyCenterFrame, text='Name', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=0)
+        self.lblCurrentAction = Label(self.OverviewBodyCenterFrame, text='Current Action', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=1)
+        self.lblTitleThoughts = Label(self.OverviewBodyCenterFrame, text='Thoughts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=2)
+        self.lblTitleRuntime = Label(self.OverviewBodyCenterFrame, text='Runtime', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=3)
+
+    def overviewDestroyAllLabels(self):
+        list = self.OverviewBodyCenterFrame.grid_slaves()
+        for l in list:
+            l.destroy()
+        self.overviewCreateTitleLabels()
 
 app = Tk()
 app.iconbitmap('src/tempus.ico')
