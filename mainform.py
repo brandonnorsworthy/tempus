@@ -43,42 +43,18 @@ class Window(object):
         self.btnHelp = Button(self.MenuBar, text='Help', font='Roboto', bd=0, bg=colorMenuShade, activebackground=colorMenuShade, activeforeground='#fff', fg='#fff', command=self.helpPushed)
         self.btnHelp.pack(side=LEFT,fill=BOTH,expand=Y)
 
-        #TOP FULL BODY FRAME
-        self.OverviewBodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=2)
-        self.OverviewBodyFrame.pack(fill=BOTH, expand=Y)
-
-        #TOP BODY SHOWING CONNECTED
-        self.OverviewTopBodyFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
-        self.OverviewTopBodyFrame.pack(fill=X, anchor=N)
-        
-        self.lblAmountConnected = Label(self.OverviewTopBodyFrame, text='Device(s) Connected: 0, Please Refresh', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
-        self.btnRefreshEmulators = Button(self.OverviewTopBodyFrame, text='Refresh', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
-        self.btnRefreshEmulators.place(relx=1, x=0,y=0, anchor=NE)
-        self.btnDelEmulators = Button(self.OverviewTopBodyFrame, text='Delete', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.overviewDestroyAllLabels)
-        self.btnDelEmulators.place(relx=1, x=-65,y=0, anchor=NE)
-
-        #OVERVIEW CENTER BODY
-        self.OverviewBodyCenterFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, bd=0)
-        self.OverviewBodyCenterFrame.pack(fill=BOTH, expand=Y)
-
-        self.overviewCreateTitleLabels()
-
-        self.btnRefreshEmulatorsPushed()
-
-        self.OverviewBodyCenterFrame.columnconfigure(0, weight=3)
-        self.OverviewBodyCenterFrame.columnconfigure(1, weight=3)
-        self.OverviewBodyCenterFrame.columnconfigure(2, weight=3)
-        self.OverviewBodyCenterFrame.columnconfigure(3, weight=0)
-        #BOTTOM BODY
-        self.BodyBottomFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
-        self.BodyBottomFrame.pack(fill=X, anchor=S)
-
-        self.lblTitle = Label(self.BodyBottomFrame, text='This is where you can monitor your bots live with current Tasks, Thoughts, and whether they are Connected.', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
-        self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
+        self.createOverviewTab()
 
     def overviewPushed(self):
         if (self.btnOverview['state'] == NORMAL):
+            if (self.btnScripts['state'] == DISABLED):
+                self.ScriptsBodyFrame.destroy()
+            if (self.btnSettings['state'] == DISABLED):
+                self.SettingsBodyFrame.destroy()
+            if (self.btnHelp['state'] == DISABLED):
+                self.HelpBodyFrame.destroy()
+            self.BodyBottomFrame.destroy()
+            self.createOverviewTab()
             self.lblTitle['text'] = 'This is where you can monitor your bots live with Tasks, Scripts, and whether they are Connected.'
             self.btnScripts['bg'] = colorMenuShade
             self.btnScripts['state'] = NORMAL
@@ -94,6 +70,14 @@ class Window(object):
 
     def scriptsPushed(self):
         if (self.btnScripts['state'] == NORMAL):
+            if (self.btnOverview['state'] == DISABLED):
+                self.OverviewBodyFrame.destroy()
+            if (self.btnSettings['state'] == DISABLED):
+                self.SettingsBodyFrame.destroy()
+            if (self.btnHelp['state'] == DISABLED):
+                self.HelpBodyFrame.destroy()
+            self.BodyBottomFrame.destroy()
+            self.createScriptsTab()
             self.lblTitle['text'] = 'This contains all Skilling and Money Making scripts.'
             self.btnOverview['bg'] = colorMenuShade
             self.btnOverview['state'] = NORMAL
@@ -109,6 +93,14 @@ class Window(object):
             
     def settingsPushed(self):
         if (self.btnSettings['state'] == NORMAL):
+            if (self.btnScripts['state'] == DISABLED):
+                self.ScriptsBodyFrame.destroy()
+            if (self.btnOverview['state'] == DISABLED):
+                self.OverviewBodyFrame.destroy()
+            if (self.btnHelp['state'] == DISABLED):
+                self.HelpBodyFrame.destroy()
+            self.BodyBottomFrame.destroy()
+            self.createSettingsTab()
             self.lblTitle['text'] = 'Fine tunings of the tempus.'
             self.btnSettings['state'] = DISABLED
             self.btnSettings['bg'] = colorMain
@@ -124,6 +116,14 @@ class Window(object):
 
     def helpPushed(self):
         if (self.btnHelp['state'] == NORMAL):
+            if (self.btnScripts['state'] == DISABLED):
+                self.ScriptsBodyFrame.destroy()
+            if (self.btnSettings['state'] == DISABLED):
+                self.SettingsBodyFrame.destroy()
+            if (self.btnOverview['state'] == DISABLED):
+                self.OverviewBodyFrame.destroy()
+            self.BodyBottomFrame.destroy()
+            self.createHelpTab()
             self.lblTitle['text'] = 'Help reguarding Setting up and Tips to keep your bots alive longer.'
             self.btnHelp['state'] = DISABLED
             self.btnHelp['bg'] = colorMain
@@ -148,6 +148,99 @@ class Window(object):
         
         self.btnRefreshEmulators['state'] = ACTIVE
         self.btnRefreshEmulators['bg'] = colorMenuShade
+
+    def createOverviewTab(self):
+        #TOP FULL BODY FRAME
+        self.OverviewBodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=2)
+        self.OverviewBodyFrame.pack(fill=BOTH, expand=Y)
+
+        #TOP BODY SHOWING CONNECTED
+        self.OverviewTopBodyFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.OverviewTopBodyFrame.pack(fill=X, anchor=N)
+        
+        self.lblAmountConnected = Label(self.OverviewTopBodyFrame, text='Device(s) Connected: 0, Please Refresh', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
+        self.btnRefreshEmulators = Button(self.OverviewTopBodyFrame, text='Refresh', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
+        self.btnRefreshEmulators.place(relx=1, x=0,y=0, anchor=NE)
+        self.btnDelEmulators = Button(self.OverviewTopBodyFrame, text='Delete', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.overviewDestroyAllLabels)
+        self.btnDelEmulators.place(relx=1, x=-65,y=0, anchor=NE)
+
+        #OVERVIEW CENTER BODY
+        self.OverviewBodyCenterFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, bd=0)
+        self.OverviewBodyCenterFrame.pack(fill=BOTH, expand=Y)
+
+        self.overviewCreateTitleLabels()
+
+        self.OverviewBodyCenterFrame.columnconfigure(0, weight=3)
+        self.OverviewBodyCenterFrame.columnconfigure(1, weight=3)
+        self.OverviewBodyCenterFrame.columnconfigure(2, weight=3)
+        self.OverviewBodyCenterFrame.columnconfigure(3, weight=0)
+
+        #BOTTOM BODY
+        self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.BodyBottomFrame.pack(fill=X, anchor=S)
+
+        self.lblTitle = Label(self.BodyBottomFrame, text='This is where you can monitor your bots live with current Tasks, Thoughts, and whether they are Connected.', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
+
+    def createScriptsTab(self):
+        #TOP FULL BODY FRAME
+        self.ScriptsBodyFrame = Frame(self.master, bg=colorShadeNormal, width=630, bd=2)
+        self.ScriptsBodyFrame.pack(fill=BOTH, expand=Y)
+
+        #TOP BODY SHOWING CONNECTED
+        self.ScriptsTopBodyFrame = Frame(self.ScriptsBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.ScriptsTopBodyFrame.pack(fill=X, anchor=N)
+        
+        self.lblAmountConnected = Label(self.ScriptsTopBodyFrame, text='Device(s) Connected: 0, Please Refresh', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
+
+        #Scripts CENTER BODY
+        self.ScriptsBodyCenterFrame = Frame(self.ScriptsBodyFrame, bg=colorShadeNormal, bd=0)
+        self.ScriptsBodyCenterFrame.pack(fill=BOTH, expand=Y)
+
+        self.lblTitleName = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=0)
+        self.lblCurrentAction = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=1)
+        self.lblTitleThoughts = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=2)
+        self.lblTitleRuntime = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=3)
+
+        self.ScriptsBodyCenterFrame.columnconfigure(0, weight=3)
+        self.ScriptsBodyCenterFrame.columnconfigure(1, weight=3)
+        self.ScriptsBodyCenterFrame.columnconfigure(2, weight=3)
+        self.ScriptsBodyCenterFrame.columnconfigure(3, weight=0)
+
+        #BOTTOM BODY
+        self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.BodyBottomFrame.pack(fill=X, anchor=S)
+
+        self.lblTitle = Label(self.BodyBottomFrame, text='', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
+
+    def createSettingsTab(self):
+        #Settings CENTER BODY
+        self.SettingsBodyCenterFrame = Frame(self.SettingsBodyFrame, bg=colorShadeNormal, bd=0)
+        self.SettingsBodyCenterFrame.pack(fill=BOTH, expand=Y)
+
+        #BOTTOM BODY
+        self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.BodyBottomFrame.pack(fill=X, anchor=S)
+
+        self.lblTitle = Label(self.BodyBottomFrame, text='', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
+
+    def createHelpTab(self):
+        #Help CENTER BODY
+        self.HelpBodyCenterFrame = Frame(self.HelpBodyFrame, bg=colorShadeNormal, bd=0)
+        self.HelpBodyCenterFrame.pack(fill=BOTH, expand=Y)
+
+        #BOTTOM BODY
+        self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
+        self.BodyBottomFrame.pack(fill=X, anchor=S)
+
+        self.lblTitle = Label(self.BodyBottomFrame, text='', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        self.lblTitle.place(relx=0, rely=1, x=0, y=0, anchor=SW)
+
+
 
     def overviewRecreateConnectedLabels(self, connected):
         self.overviewDestroyAllLabels()
