@@ -4,8 +4,6 @@ import time
 import math
 from sys import argv
 
-script, loop_amount, reset_camera = argv
-
 #TODO call python script specifically for that emulator(port)
 #TODO webwalker interface
 #TODO shows where all the connected bots are one a map
@@ -32,11 +30,16 @@ script, loop_amount, reset_camera = argv
     #TODO move the camera around and then return it back
     #TODO stop interacting for a random period of time up to ~5 minutes
 
-emulator_port = int(5555) #hard coded for testing allows for all emulators to be interacted with apon change
-resolution_width = int(1280)
-resolution_height = int(720)
+emulator_port = 5555 #hard coded for testing allows for all emulators to be interacted with apon change
+resolution_width = 1280
+resolution_height = 720
+loop_amount = 0
 
 #auto crunch area
+
+def initiate(local_emulator_port, script, loop_amount):
+    emulator_port = local_emulator_port
+    print(emulator_port)
 
 def sleep(amount): #sleeps for a specific amount of time
     time.sleep(amount)
@@ -268,11 +271,6 @@ def bankAtVarrockEastBank(): #bank items at varrock east bank needs expansion
     sleep(7)
 
 def main():
-
-    if reset_camera == 'True': #second argument on script startup, if true will reset camera; True/False
-        centerCamera()
-        setZoomLevel()
-        exit()
 
     for current_loop in range(1,int(loop_amount) - 1): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
         if ((current_loop % (math.floor(int(loop_amount) / 4))) == 0): #Keep user updated on progress of current run

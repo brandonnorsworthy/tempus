@@ -1,0 +1,7 @@
+load frame
+all labels and buttons
+connect all devices
+after devices are connected set the global array
+only let the btnrefreshemulators set the global array
+only let the btnrefreshemulators clear the global array
+creating the overview labels can use the global array

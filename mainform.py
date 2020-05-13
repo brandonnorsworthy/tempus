@@ -1,5 +1,7 @@
 from tkinter import *
+from tkinter import ttk
 import shellconnect
+import array
 
 #adobe colors
 colorDown = '#31deb5'
@@ -11,9 +13,14 @@ colorShadeLighter = '#5f626e'
 colorShadeNormal = '#383940'
 colorShadeDarker = '#222226'
 
-currentlyConnectedEmulators = [['not connected','','','']]
+currentlyConnectedEmulators = []
+connectedGlobal = []
+
+scriptsRadioButtonChoice = 1
+scriptsComboboxChoice = ''
 
 class Window(object):
+
     def __init__(self, master):
 
         self.master = master
@@ -24,11 +31,9 @@ class Window(object):
         self.master.resizable(0,0)
 
         self.AddWidgets()
+        self.btnRefreshEmulatorsPushed()
     
     def AddWidgets(self):
-
-        self.count = 0
-        self.radioVar = IntVar() #radiobuttion for
 
         #menu bar, home, skills, cash, settings, help
         self.MenuBar = Frame(self.master, bg=colorMenuShade, width=630, height=40)
@@ -141,11 +146,24 @@ class Window(object):
         self.btnRefreshEmulators['state'] = DISABLED
         self.btnRefreshEmulators['bg'] = colorMain
         self.lblAmountConnected['text'] = 'Device(s) Connected: Refreshing'
-        connected = shellconnect.connectToBluestacks()
+        global currentlyConnectedEmulators
+        global connectedGlobal
 
-        self.lblAmountConnected['text'] = 'Device(s) Connected: ' + str(len(connected))
-        self.overviewRecreateConnectedLabels(connected)
+        connectedGlobal = shellconnect.connectToBluestacks()
+
+        currentlyConnectedEmulators = []
+        if len(connectedGlobal) > 0:
+            for x in range(0, len(connectedGlobal)):
+                currentlyConnectedEmulators.append([connectedGlobal[x]])
+        else:
+            currentlyConnectedEmulators = ['nothing connected', '', '', '']
+
+        self.lblAmountConnected['text'] = 'Device(s) Connected: ' + str(len(connectedGlobal))
+        self.overviewRecreateConnectedLabels()
         
+        print(connectedGlobal)
+        print(currentlyConnectedEmulators)
+
         self.btnRefreshEmulators['state'] = ACTIVE
         self.btnRefreshEmulators['bg'] = colorMenuShade
 
@@ -158,7 +176,11 @@ class Window(object):
         self.OverviewTopBodyFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
         self.OverviewTopBodyFrame.pack(fill=X, anchor=N)
         
-        self.lblAmountConnected = Label(self.OverviewTopBodyFrame, text='Device(s) Connected: 0, Please Refresh', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        if len(connectedGlobal) > 0:
+            ammountConnectedString = "Device(s) Connected: "  + str(len(connectedGlobal))
+        else:
+            ammountConnectedString = "Device(s) Connected: "  + str(len(connectedGlobal)) + ", Please Refresh"
+        self.lblAmountConnected = Label(self.OverviewTopBodyFrame, text=ammountConnectedString, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
         self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
         self.btnRefreshEmulators = Button(self.OverviewTopBodyFrame, text='Refresh', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
         self.btnRefreshEmulators.place(relx=1, x=0,y=0, anchor=NE)
@@ -168,11 +190,13 @@ class Window(object):
         self.OverviewBodyCenterFrame.pack(fill=BOTH, expand=Y)
 
         self.overviewCreateTitleLabels()
+        self.overviewRecreateConnectedLabels()
 
         self.OverviewBodyCenterFrame.columnconfigure(0, weight=3)
         self.OverviewBodyCenterFrame.columnconfigure(1, weight=3)
         self.OverviewBodyCenterFrame.columnconfigure(2, weight=3)
         self.OverviewBodyCenterFrame.columnconfigure(3, weight=0)
+
 
         #BOTTOM BODY
         self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
@@ -190,8 +214,25 @@ class Window(object):
         self.ScriptsTopBodyFrame = Frame(self.ScriptsBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
         self.ScriptsTopBodyFrame.pack(fill=X, anchor=N)
         
-        self.lblAmountConnected = Label(self.ScriptsTopBodyFrame, text='Device(s) Connected: 0, Please Refresh', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
+        if len(connectedGlobal) > 0:
+            ammountConnectedString = "Device(s) Connected: "  + str(len(connectedGlobal))
+        else:
+            ammountConnectedString = "Device(s) Connected: "  + str(len(connectedGlobal)) + ", Please Refresh"
+        
+        self.lblAmountConnected = Label(self.ScriptsTopBodyFrame, text=ammountConnectedString, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
         self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
+
+        self.btnStart = Button(self.ScriptsTopBodyFrame, text='Start', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
+        self.btnStart.place(relx=1, x=0, y=0, anchor=NE)
+
+        monthchoosen = ttk.Combobox(self.ScriptsTopBodyFrame, width = 27, textvariable = scriptsComboboxChoice) 
+
+        #for emulator in range(0,len(currentlyConnectedEmulators)):
+        #    print(str(currentlyConnectedEmulators[emulator][0]))
+            #monthchoosen['values'] += str(currentlyConnectedEmulators[emulator][0])
+        # Adding combobox drop down list 
+        
+        monthchoosen.place(relx=1, x=-48, y=2, anchor=NE)
 
         #Scripts CENTER BODY
         self.ScriptsBodyCenterFrame = Frame(self.ScriptsBodyFrame, bg=colorShadeNormal, bd=0)
@@ -200,7 +241,31 @@ class Window(object):
         self.lblTitleName = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=0)
         self.lblCurrentAction = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=1)
         self.lblTitleThoughts = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=2)
-        
+
+        SCRIPT_CATEGORIES = [
+            ("Combat"),
+            ("Prayer"),
+            ("Magic"),
+            ("Runecrafting"),
+            ("Construction"),
+            ("Agility"),
+            ("Mining"),
+            ("Woodcutting"),
+            ("Agility"),
+            ("Smithing"),
+        ]
+
+        row = 1
+        column = 0
+        for x in range(0, len(SCRIPT_CATEGORIES)):
+            b = Radiobutton(self.ScriptsBodyCenterFrame, text=SCRIPT_CATEGORIES[row+column],
+                            variable=scriptsRadioButtonChoice, value=row+column, activebackground=colorShadeLighter, fg='#fff', bg=colorShadeLighter, bd=0, command=self.scriptsRecolorAllRadioButtons)
+            b.grid(sticky=W, row=row, column=column)
+            column += 1
+            if column > 2:
+                row += 1
+                column = 0
+
         self.ScriptsBodyCenterFrame.columnconfigure(0, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(1, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(2, weight=3)
@@ -254,12 +319,13 @@ class Window(object):
 
 
 
-    def overviewRecreateConnectedLabels(self, connected):
+    def overviewRecreateConnectedLabels(self):
         self.overviewDestroyAllLabels()
-        if len(connected) > 0:
+
+        if len(connectedGlobal) > 0:
             currentlyConnectedEmulators = [[]]
-            for x in range(0, len(connected)):
-                currentlyConnectedEmulators.insert(x, ['emulator:' + str(connected[x]),'nothing','nothing','0:00:00'])
+            for x in range(0, len(connectedGlobal)):
+                currentlyConnectedEmulators.insert(x, ['BlueStacks:' + str(connectedGlobal[x]),'nothing','nothing','0:00:00'])
                 self.overviewCreateConnectedLabels(currentlyConnectedEmulators[x][0],currentlyConnectedEmulators[x][1],currentlyConnectedEmulators[x][2],currentlyConnectedEmulators[x][3],x+1)
         else:
             self.lblAmountConnected['text'] = 'Device(s) Connected: 0, Are you sure BlueStacks is running?'
@@ -282,6 +348,21 @@ class Window(object):
         for l in list:
             l.destroy()
         self.overviewCreateTitleLabels()
+
+    def scriptsRecolorAllRadioButtons(self):
+        list = self.ScriptsBodyCenterFrame.grid_slaves()
+        for l in list:
+            if l['state'] == 'DISABLED':
+                l['bg'] == colorMain
+                l['fg'] == colorShadeNormal
+            else:
+                l['bg'] == colorShadeNormal
+                l['fg'] == '#fff'
+            print(str(l) + ' ' + str(l['state']) + ' ' + scriptsRadioButtonChoice)
+    
+    def scriptsStartSelected(self):
+        if scriptsRadioButtonChoice == 1:
+            print('mining')
 
 app = Tk()
 app.iconbitmap('src/tempus.ico')
