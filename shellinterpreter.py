@@ -30,16 +30,12 @@ from sys import argv
     #TODO move the camera around and then return it back
     #TODO stop interacting for a random period of time up to ~5 minutes
 
-emulator_port = 5555 #hard coded for testing allows for all emulators to be interacted with apon change
+script, emulator_port = argv
 resolution_width = 1280
 resolution_height = 720
-loop_amount = 0
+loop_amount = 10
 
 #auto crunch area
-
-def initiate(local_emulator_port, script, loop_amount):
-    emulator_port = local_emulator_port
-    print(emulator_port)
 
 def sleep(amount): #sleeps for a specific amount of time
     time.sleep(amount)
@@ -50,7 +46,7 @@ def sleepRandom(min, max): #sleeps for a random amount of time within a range
 
 def hexToRGB(hex_value): #converts hex color to RGB values format: (255, 255, 255)
     if not len(hex_value) == 6:
-        print("hexToRGB(): Warning! Parameter hex_value is not 6 characters!")
+        print("hexToRGB(): Warning! Parameter hex_value is not 6 characters! " + str(hex))
         return "(255, 255, 255)"
     return (tuple(int(hex_value[i:i+2], 16) for i in (0, 2, 4)))
 
@@ -100,6 +96,7 @@ def pixelSearch(interact_x, interact_y): #Looks at the given pixel and returns t
     for stdoutline in item.stdout:
         stdoutlineformatted += str(stdoutline, 'utf-8')
 
+    
     temp = "".join(stdoutlineformatted[stdoutlineformatted.find('00000000') + 10:stdoutlineformatted.find('ff')].split()) #grab the bytes only needed which are RGB seperated by spaces and strip the whitespace
     return temp
 
@@ -234,7 +231,7 @@ def walkToSouthEastMineFromVarrockEastBank(): #part of the web walker network wi
 def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two close iron rocks, stand between both iron rocks, one on the East, one to the North
     inventoryFull = False
     powerMining = False
-
+    
     while not inventoryFull:
         mineRock(15, 15, '735041', 585, 390, 548, 355, 598, 401) #East iron rock
         if shadeVariationTest(pixelSearch(1175, 640), '5c3e2f', 10):
@@ -258,6 +255,8 @@ def mineIronOreSouthEastVarrock(): #Mine South-East of Varrock contains two clos
         sleep(2)
         walkToSouthEastMineFromVarrockEastBank()
         sleep(3)
+    else:
+        dropInventory(0)
     return
 
 def bankAtVarrockEastBank(): #bank items at varrock east bank needs expansion

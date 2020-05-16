@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import ttk
+import subprocess
 import shellconnect
 import array
 
@@ -16,12 +17,11 @@ colorShadeDarker = '#222226'
 currentlyConnectedEmulators = []
 currentlyConnectedPorts = []
 
-scriptsRadioButtonChoice = None
-scriptsComboboxChoice = ''
-
 class Window(object):
 
     def __init__(self, master):
+        self.scriptsRadioButtonChoice = IntVar(app)
+        self.scriptsComboboxChoice = StringVar(app)
 
         self.master = master
         self.master.title("tempus")
@@ -29,7 +29,7 @@ class Window(object):
         self.master.configure(bg=colorShadeNormal)
 
         self.master.resizable(0,0)
-
+        
         self.AddWidgets()
         self.btnRefreshEmulatorsPushed()
     
@@ -143,14 +143,13 @@ class Window(object):
             self.btnHelp['bg'] = colorMenuShade
 
     def btnRefreshEmulatorsPushed(self):
-        self.btnRefreshEmulators['state'] = DISABLED
         self.btnRefreshEmulators['bg'] = colorMain
+        self.btnRefreshEmulators['state'] = DISABLED
         self.lblAmountConnected['text'] = 'Device(s) Connected: Refreshing'
         global currentlyConnectedEmulators
         global currentlyConnectedPorts
 
         currentlyConnectedPorts = shellconnect.connectToBluestacks()
-        print(currentlyConnectedPorts)
         currentlyConnectedEmulators = []
         if len(currentlyConnectedPorts) > 0:
             for x in range(0, len(currentlyConnectedPorts)):
@@ -219,10 +218,8 @@ class Window(object):
         self.lblAmountConnected = Label(self.ScriptsTopBodyFrame, text=ammountConnectedString, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
         self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
 
-        self.btnStart = Button(self.ScriptsTopBodyFrame, text='Start', font='Roboto, 10', padx=5, pady=2, bd=0, bg=colorMenuShade, activebackground=colorMenuShade, highlightcolor=colorShadeLighter, activeforeground='#fff', fg='#fff', command=self.btnRefreshEmulatorsPushed)
-        self.btnStart.place(relx=1, x=0, y=0, anchor=NE)
 
-        currentlyConnectedCombobox = ttk.Combobox(self.ScriptsTopBodyFrame, width = 35, textvariable = scriptsComboboxChoice, takefocus=False, state="readonly") 
+        currentlyConnectedCombobox = ttk.Combobox(self.ScriptsTopBodyFrame, width = 35, textvariable = self.scriptsComboboxChoice, takefocus=False, state="readonly") 
 
         if len(currentlyConnectedPorts) > 0:
             temp = []
@@ -244,9 +241,10 @@ class Window(object):
         self.ScriptsBodyCenterFrame = Frame(self.ScriptsBodyFrame, bg=colorShadeNormal, bd=0)
         self.ScriptsBodyCenterFrame.pack(fill=BOTH, expand=Y)
 
-        self.lblTitleName = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=0)
-        self.lblCurrentAction = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=1)
-        self.lblTitleThoughts = Label(self.ScriptsBodyCenterFrame, text='scripts', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=0, column=2)
+        btnStartScripts = Button(self.ScriptsBodyCenterFrame, text='Start', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeLighter, activebackground=colorMenuShade, activeforeground=colorShadeLighter, fg='#fff', command=self.callBackStartScripts)
+        btnStartScripts.grid(sticky=W+E+S, row=0, column=0, columnspan=3, padx=5, pady=5)
+
+        self.lblTitleName = Label(self.ScriptsBodyCenterFrame, text='Categories', font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg=colorShadeLighter).grid(sticky=W, row=1, column=0)
 
         SCRIPT_CATEGORIES = [
             ("Combat"),
@@ -257,29 +255,26 @@ class Window(object):
             ("Agility"),
             ("Mining"),
             ("Woodcutting"),
-            ("Agility"),
             ("Smithing"),
         ]
-
-        global scriptsRadioButtonChoice
-        row = 1
+        row = 2
         column = 0
+
         for x in range(0, len(SCRIPT_CATEGORIES)):
-            b = Radiobutton(self.ScriptsBodyCenterFrame, text=SCRIPT_CATEGORIES[x],
-                            variable=scriptsRadioButtonChoice, value=SCRIPT_CATEGORIES[x], activebackground=colorMain, fg='#fff', indicatoron=1, bg=colorShadeLighter, bd=0,
-                            tristatevalue=0)
-            b.grid(sticky=W, row=row, column=column)
+            b = Radiobutton(self.ScriptsBodyCenterFrame, text=SCRIPT_CATEGORIES[x], width=30, anchor=W, variable=self.scriptsRadioButtonChoice, 
+            activebackground=colorMenuShade, activeforeground=colorShadeLighter, selectcolor=colorMain, fg='#fff', bg=colorShadeLighter, indicatoron=0,
+            padx=2, pady=2, value=x, bd=0, relief=RIDGE, command=self.scriptsRecolorAllRadioButtons)
+            b.grid(sticky=W, row=row, column=column, padx=5, pady=5)
             column += 1
             if column > 2:
                 row += 1
                 column = 0
-
         
         self.ScriptsBodyCenterFrame.columnconfigure(0, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(1, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(2, weight=3)
         
-        Button(self.ScriptsBodyCenterFrame, text = "check rads", command=self.scriptsRecolorAllRadioButtons).grid(sticky=E, row=4, column=2)
+        Button(self.ScriptsBodyCenterFrame, text = "check rads", width=30, bg=colorShadeLighter, activebackground=colorMenuShade, activeforeground=colorShadeLighter, bd=0, compound=LEFT, command=self.scriptsRecolorAllRadioButtons).grid(sticky=E, row=5, column=0, padx=5, pady=5)
 
         #BOTTOM BODY
         self.BodyBottomFrame = Frame(self.master, bg=colorShadeNormal, width=630, height=30, bd=0)
@@ -334,9 +329,6 @@ class Window(object):
         self.overviewDestroyAllLabels()
         global currentlyConnectedEmulators
         global currentlyConnectedPorts
-        print("refreshing")
-        print(currentlyConnectedEmulators)
-        print(currentlyConnectedPorts)
 
         if len(currentlyConnectedPorts) > 0:
             currentlyConnectedEmulators = [[]]
@@ -366,20 +358,23 @@ class Window(object):
         self.overviewCreateTitleLabels()
 
     def scriptsRecolorAllRadioButtons(self):
-        print(scriptsRadioButtonChoice)
         list = self.ScriptsBodyCenterFrame.grid_slaves()
         for l in list:
-            if l['state'] == 'DISABLED':
+            if l['state'] == 'ACTIVE':
                 l['bg'] == colorMain
                 l['fg'] == colorShadeNormal
             else:
                 l['bg'] == colorShadeNormal
                 l['fg'] == '#fff'
-            print('objectL' + str(l) + ' ,state:' + str(l['state']) + ' ,value:' + str(scriptsRadioButtonChoice))
-    
-    def scriptsStartSelected(self):
-        if scriptsRadioButtonChoice == 1:
-            print('mining')
+
+    def callBackStartScripts(self):
+        stdoutlineformatted = ''
+        item = subprocess.Popen([sys.executable, 'shellinterpreter.py', self.scriptsComboboxChoice.get()[self.scriptsComboboxChoice.get().find(':')+1:len(self.scriptsComboboxChoice.get())]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        for stdoutline in item.stdout:
+            stdoutlineformatted += str(stdoutline, 'utf-8')
+
+        print(stdoutline)
+        #shellinterpreter.mineIronOreSouthEastVarrock(self.scriptsComboboxChoice.get()[self.scriptsComboboxChoice.get().find(':')+1:len(self.scriptsComboboxChoice.get())],self.scriptsRadioButtonChoice.get())
 
 app = Tk()
 app.iconbitmap('src/tempus.ico')

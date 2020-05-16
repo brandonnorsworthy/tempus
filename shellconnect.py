@@ -16,7 +16,6 @@ def connectToBluestacks():
     #    stdoutlineformatted += str(stdoutline, 'utf-8')
     if stdoutlineformatted.find('localhost') == -1:
         temp = ''
-        print(stdoutlineformatted)
     else:
         temp = stdoutlineformatted[stdoutlineformatted.find('localhost') + 10:len(stdoutlineformatted)-1].split('localhost:') #grab only the ports 
     for x in range(0,len(temp)):
