@@ -16,8 +16,8 @@ To set up the script you also need to download **Python3** and **BlueStacks**
 * The real resolution on your monitor is irrelevant so don't try just resizing the window that doesn't help with anything
 
 After downloading navigate to the installation location of tempus via Command Prompt and use the command `py shellinterpreter.py <count> <reset_camera>`
-* <count> -> (1/9999) The number of times the script will be ran
-* <reset_camera> -> (True/False) Whether or not you need your game set to the specific settings for the bot to work correctly on the first startup this will always need to be 'True'
+* < count > -> (1/9999) The number of times the script will be ran
+* < reset_camera > -> (True/False) Whether or not you need your game set to the specific settings for the bot to work correctly on the first startup this will always need to be 'True'
 
 ## Currently Support
 
@@ -29,7 +29,7 @@ After downloading navigate to the installation location of tempus via Command Pr
 ```
 #TODO call python script specifically for that emulator(port)
 #TODO webwalker interface
-#TODO shows where all the connected bots are one a map
+#TODO shows where all the connected bots are on a map
 #TODO front end web face for bot control
 #TODO when sending RANDOM variables to a batch file format them to 1 decimal place maximum [reduce memory sent]
 #TODO random circle ontop of randomness [multiple layers of randomness]
