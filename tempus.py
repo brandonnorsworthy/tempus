@@ -95,7 +95,7 @@ class Window(object):
         else:
             self.btnScripts['state'] = NORMAL
             self.btnScripts['bg'] = colorMenuShade
-            
+
     def settingsPushed(self):
         if (self.btnSettings['state'] == NORMAL):
             if (self.btnScripts['state'] == DISABLED):
