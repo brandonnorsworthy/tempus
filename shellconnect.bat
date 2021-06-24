@@ -1,6 +1,6 @@
-cd C:\Users\Brandon\Desktop\tempus\tools
-
 @echo off
+
+cd tools
 
 adb disconnect
 

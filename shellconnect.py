@@ -11,9 +11,11 @@ def connectToBluestacks():
         stdoutlineformatted += str(stdoutline, 'utf-8')
     time.sleep(2)
 
+    ##IF YOU SEND SHELLDEVICES IT RETURNS MULTIPLE LINES OF THE SAME PORT SO DISABLE IT SO IT DOESNT GET LOGGED TWICE
     #item = subprocess.Popen(["shelldevices.bat"], shell=True, stdout=subprocess.PIPE) #launch subprocess to send commands to adb using .bat files
     #for stdoutline in item.stdout:
     #    stdoutlineformatted += str(stdoutline, 'utf-8')
+
     if stdoutlineformatted.find('localhost') == -1:
         temp = ''
     else:

@@ -29,10 +29,10 @@ class Window(object):
         self.master.configure(bg=colorShadeNormal)
 
         self.master.resizable(0,0)
-        
+
         self.AddWidgets()
         self.btnRefreshEmulatorsPushed()
-    
+
     def AddWidgets(self):
 
         #menu bar, home, skills, cash, settings, help
@@ -151,6 +151,7 @@ class Window(object):
 
         currentlyConnectedPorts = shellconnect.connectToBluestacks()
         currentlyConnectedEmulators = []
+
         if len(currentlyConnectedPorts) > 0:
             for x in range(0, len(currentlyConnectedPorts)):
                 currentlyConnectedEmulators.append(['BlueStacks:' + str(currentlyConnectedPorts[x])])
@@ -372,8 +373,6 @@ class Window(object):
         item = subprocess.Popen([sys.executable, 'shellinterpreter.py', self.scriptsComboboxChoice.get()[self.scriptsComboboxChoice.get().find(':')+1:len(self.scriptsComboboxChoice.get())]], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
         for stdoutline in item.stdout:
             stdoutlineformatted += str(stdoutline, 'utf-8')
-
-        print(stdoutline)
         #shellinterpreter.mineIronOreSouthEastVarrock(self.scriptsComboboxChoice.get()[self.scriptsComboboxChoice.get().find(':')+1:len(self.scriptsComboboxChoice.get())],self.scriptsRadioButtonChoice.get())
 
 app = Tk()
