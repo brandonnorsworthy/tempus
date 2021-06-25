@@ -274,7 +274,7 @@ def main():
     for current_loop in range(1,int(loop_amount) - 1): #first argument on script startup, loops the queued scripts until set limit is reached, can be set to any integer
         if ((current_loop % (math.floor(int(loop_amount) / 4))) == 0): #Keep user updated on progress of current run
             print("main(): Current Loop is: " + str(current_loop) + " out of " + str(loop_amount))
-        
+
         #SCRIPT QUEUE
         mineIronOreSouthEastVarrock()
 

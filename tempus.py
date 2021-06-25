@@ -172,7 +172,7 @@ class Window(object):
         #TOP BODY SHOWING CONNECTED
         self.OverviewTopBodyFrame = Frame(self.OverviewBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
         self.OverviewTopBodyFrame.pack(fill=X, anchor=N)
-        
+
         if len(currentlyConnectedPorts) > 0:
             ammountConnectedString = "Device(s) Connected: "  + str(len(currentlyConnectedPorts))
         else:
@@ -210,12 +210,12 @@ class Window(object):
         #TOP BODY SHOWING CONNECTED
         self.ScriptsTopBodyFrame = Frame(self.ScriptsBodyFrame, bg=colorShadeNormal, width=630, height=30, bd=0)
         self.ScriptsTopBodyFrame.pack(fill=X, anchor=N)
-        
+
         if len(currentlyConnectedPorts) > 0:
             ammountConnectedString = "Device(s) Connected: "  + str(len(currentlyConnectedPorts))
         else:
             ammountConnectedString = "Device(s) Connected: "  + str(len(currentlyConnectedPorts)) + ", Please Refresh"
-        
+
         self.lblAmountConnected = Label(self.ScriptsTopBodyFrame, text=ammountConnectedString, font='Roboto, 10', padx=5, pady=5, bd=0, bg=colorShadeNormal, fg='#fff')
         self.lblAmountConnected.place(relx=0, x=0, y=0, anchor=NW)
 
@@ -226,14 +226,14 @@ class Window(object):
             temp = []
             for emulator in range(0,len(currentlyConnectedPorts)):
                 temp.append(str(currentlyConnectedEmulators[emulator][0]))
-            # Adding combobox drop down list 
-            
+            # Adding combobox drop down list
+
             currentlyConnectedCombobox['values'] = temp
             currentlyConnectedCombobox['state'] = "readonly"
         else:
             currentlyConnectedCombobox['values'] = ['Please Connect and/or Refresh devices']
             currentlyConnectedCombobox['state'] = DISABLED
-        
+
         currentlyConnectedCombobox.bind("<<ComboboxSelected>>",lambda e: self.ScriptsBodyFrame.focus())
         currentlyConnectedCombobox.place(relx=1, x=-48, y=2, anchor=NE)
         currentlyConnectedCombobox.current(0)
@@ -270,11 +270,11 @@ class Window(object):
             if column > 2:
                 row += 1
                 column = 0
-        
+
         self.ScriptsBodyCenterFrame.columnconfigure(0, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(1, weight=3)
         self.ScriptsBodyCenterFrame.columnconfigure(2, weight=3)
-        
+
         Button(self.ScriptsBodyCenterFrame, text = "check rads", width=30, bg=colorShadeLighter, activebackground=colorMenuShade, activeforeground=colorShadeLighter, bd=0, compound=LEFT, command=self.scriptsRecolorAllRadioButtons).grid(sticky=E, row=5, column=0, padx=5, pady=5)
 
         #BOTTOM BODY
